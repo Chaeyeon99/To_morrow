@@ -50,5 +50,3 @@ def login(request):
         form = AuthenticationForm()
     
     return render(request, 'accounts/login.html', {'form': form})
-
-    
