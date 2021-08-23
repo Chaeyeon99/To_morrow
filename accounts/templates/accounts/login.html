@@ -1,0 +1,7 @@
+<form method="POST">  
+    {% csrf_token %}
+    {{ form.as_table }}
+    <input type="submit" value="로그인"><br>
+    
+</form>
+<a href="{% url 'accounts:Index' %}"><button>메인화면</button> </a>
