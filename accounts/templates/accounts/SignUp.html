@@ -1,0 +1,21 @@
+{% load static %}
+
+{% block content %}
+    <h2>일반회원용 회원가입</h2>
+ 
+    {% if form.errors %}
+    <p style="color:red;">양식에 맞게 작성해주세요.</p>
+    {% endif %}
+
+    <form method="post" action="{% url 'accounts:SignUp' %}">
+
+    {% csrf_token %} 
+
+
+    {{form.as_p}}
+
+    <button type="submit"> 가입하기 </button>
+    </form>
+
+{% endblock %}
+<a href="{% url 'accounts:Index' %}"><button>메인화면</button> </a>
