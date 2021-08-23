@@ -26,7 +26,7 @@ def signup(request):
 
 
 #로그인
-def login(request): 
+def login_view(request): 
     if request.user.is_authenticated:
         return HttpResponseRedirect('/accounts/Index')
 
@@ -35,12 +35,15 @@ def login(request):
 
         if form.is_valid():
             print("cleaned_data : ", form.cleaned_data)
-            memberId = form.cleaned_data['username']
-            print("memberId : ", memberId)
+            login_memberId = form.cleaned_data['username']
+            print("memberId : ", login_memberId)
             raw_password = form.cleaned_data['password']
-            member = Member.objects.get(memberId=memberId)
-            
+            member = Member.objects.get(memberId=login_memberId)
+        
             if check_password(raw_password, member.password):
+                memberId = authenticate(username=login_memberId, password=raw_password)
+                print("auth user : ", memberId)
+                login(request, memberId) 
                 request.session['user']=member.memberId
                 return redirect('/accounts')
             else:
@@ -50,3 +53,13 @@ def login(request):
         form = AuthenticationForm()
     
     return render(request, 'accounts/login.html', {'form': form})
+
+
+# 로그아웃 
+def logout_view(request):
+    if request.session.get('user'):
+        del(request.session['user'])
+        logout(request)
+        return HttpResponseRedirect('/accounts')
+    else :
+        print('로그아웃 불가. 로그인하고 오세요.')
