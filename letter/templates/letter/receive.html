@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>receive letter</h2>
+<!--로그인 사용자 확인 {{user}}없어도 됨
+지금 코드는 그 시간에만 데이터 보여주는 거이기 때문에 그걸 저장해두고 그시간 이후 계속 띄워주도록 UI 연동 필요
+-->
+{% comment %} {{% if member %}}
+
+<h1>To, morrow message for {{member.nickname}}</h1>
+
+
+{{nickname}}
+{% if user.is_authenticated %}
+    <p>To, morrow mesage for {{ user.username }} </p>
+    {% if user.username != receiveletter.receiver%}
+        {% if datetime.now() >= letter.receivedate%}
+            {% for letters in letter%}
+                <a href="{% url 'message_detail' letter.letterid %}">{{letter.letterid}}</a>&nbsp;&nbsp;&nbsp;
+                {{letter.receivedate}}&nbsp;&nbsp;
+                {{ letters.content}}
+{% else %}
+    <p>Please log in</p>
+{% endif %}
+</body>
+</html> {% endcomment %}

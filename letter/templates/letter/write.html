@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <form action="{% url 'letter:write' %}" method="post">
+        {% csrf_token %}
+        {{ write_form.as_p }}
+        <input type="submit" value="OK">
+    </form>
+
+</body>
+</html>
+
