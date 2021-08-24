@@ -1,0 +1,20 @@
+
+<h1>User Edit</h1>
+
+{% if messages %}
+	{% for message in messages %}
+		{{ message.tags }}
+		{{ message.message }}
+        <script>
+            alert('{{ message }}');
+        </script>
+	{% endfor %}
+{% endif %}
+
+
+<form method="POST">
+    {% csrf_token %}
+    
+    {{ update_form.as_table }}
+    <input type="submit" value="Submit"/>
+</form>

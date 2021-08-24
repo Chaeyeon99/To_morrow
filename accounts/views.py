@@ -3,9 +3,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.decorators import login_required
+from django.contrib.messages import constants as messages_constants
+from django.contrib import messages
 
-
-from .forms import UserCreationForm
+from .forms import UserCreationForm, CustomUserChangeForm
 from .models import Member
 
 
@@ -14,6 +16,7 @@ def Index (request):
     return render(request,'accounts/Index.html',None) 
 
 # 회원가입
+
 def signup(request): 
     if request.method == "POST":
         form = UserCreationForm(request.POST)
@@ -64,6 +67,7 @@ def logout_view(request):
 
 
 # 개인 페이지
+@login_required
 def profile(request):
     if not request.session.get('user'): 
         return redirect('/accounts/login')
@@ -78,9 +82,27 @@ def profile(request):
 
                 if Member.objects.filter(name=name).exists(): 
                     member=Member.objects.get(name=name)
-                    context={'member' : member, 'name': name}
+                    context={ 'member' : member, 'name': name }
 
         except member.DoesNotExist: 
                 raise Http404("member does not exist")
 
         return render(request, 'accounts/profile.html',context)  
+
+
+@login_required
+def updateProfile(request):
+    if request.method == 'POST':
+        update_form = CustomUserChangeForm(request.POST, instance=request.user)
+        if update_form.is_valid():
+            update_form.save()
+            context = { 'update_form' : update_form   }
+            MESSAGE_LEVEL = messages_constants.SUCCESS
+            messages.add_message(request, messages.INFO, '정보 수정에 성공했습니다.')
+            return redirect('/accounts/profile', request.user.memberId)
+        else:
+            print("Update_form ERROR!")
+    else :
+        update_form = CustomUserChangeForm(instance = request.user)
+        context = { 'update_form' : update_form   }
+        return render(request, 'accounts/update.html', context) 

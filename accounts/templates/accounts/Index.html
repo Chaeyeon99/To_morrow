@@ -1,5 +1,15 @@
-Index 페이지 
-<li><a href="{% url 'accounts:signup' %}">  회원가입 </a></li>
-<li><a href="{% url 'accounts:login' %}">  로그인 </a></li>
+<h2>Index 페이지 </h2>
+{% if user.is_active %} 
+    로그인 상태
+    <p>Welcome, <b>{{ user.name }}. </b>Thanks for logging in.</p>
 <li><a href="{% url 'accounts:logout' %}">  로그아웃 </a></li>
 <li><a href="{% url 'accounts:profile' %}"> 개인페이지 </a></li>
+
+
+
+  
+{% else %} 
+    로그아웃 상태
+    <li><a href="{% url 'accounts:signup' %}">  회원가입 </a></li>
+    <li><a href="{% url 'accounts:login' %}">  로그인 </a></li>
+{% endif %}

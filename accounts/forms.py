@@ -2,8 +2,10 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from accounts.models import Member
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth import get_user_model
 
-
+# 회원 가입 폼 
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
@@ -12,7 +14,7 @@ class UserCreationForm(forms.ModelForm):
     , ('architect', '건설'), ('public', '공무원'), ('jobseeker', '취준생'), ('housewife', '주부')
     , ('soldier', '군인'), ('etc', '기타'))
     # job = forms.CharField(choices=job_Choices)
-    job=forms.ChoiceField(choices=job_Choices)
+    job = forms.ChoiceField(choices=job_Choices)
 
 
     class Meta:
@@ -33,4 +35,17 @@ class UserCreationForm(forms.ModelForm):
             user.save()
         return user
     
-    
+
+
+# 개인 정보 수정
+class CustomUserChangeForm(UserChangeForm):
+    job_Choices=(('education', '교육자'), ('student', '학생'), ('business', '자영업자'), ('medical', '의료직')
+    , ('artist', '예술인'), ('sports', '운동인'), ('office', '직장인'), ('finance', '금융'), ('IT', 'IT')
+    , ('architect', '건설'), ('public', '공무원'), ('jobseeker', '취준생'), ('housewife', '주부')
+    , ('soldier', '군인'), ('etc', '기타'))
+
+    job = forms.ChoiceField(choices=job_Choices)
+
+    class Meta:
+        model = get_user_model()
+        fields = ['memberId', 'name','birth','job', 'nickname','phone', 'email']

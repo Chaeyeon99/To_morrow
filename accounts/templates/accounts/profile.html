@@ -1,5 +1,15 @@
 {% if member %}
 
+
+{% if messages %}
+	{% for message in messages %}
+        <script>
+            alert('{{ message }}');
+        </script>
+	{% endfor %}
+{% endif %}
+
+
 <h1> USER : {{member.memberId}}</h1>
 
 <h2>사용자 정보</h2>
@@ -32,6 +42,15 @@
             <td> 이메일   </td>
             <td>{{member.email}}</td>
         </tr>
+        <tr>
+        {% if user.is_admin == 1 %}
+        <td> 관리자 입니다</td>
+        {% else %}
+        <td> 일반 유저 입니다.</td>
+        {% endif %} 
+        </tr>
     </table>
 
+    <button onclick="location.href='/accounts/update'">회원 정보 수정</button>
+    <a href="{% url 'accounts:Index' %}"><button>메인화면</button> </a>
 {% endif %}
