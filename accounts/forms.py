@@ -5,6 +5,10 @@ from accounts.models import Member
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth import get_user_model
 
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
 # 회원 가입 폼 
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -13,8 +17,9 @@ class UserCreationForm(forms.ModelForm):
     , ('artist', '예술인'), ('sports', '운동인'), ('office', '직장인'), ('finance', '금융'), ('IT', 'IT')
     , ('architect', '건설'), ('public', '공무원'), ('jobseeker', '취준생'), ('housewife', '주부')
     , ('soldier', '군인'), ('etc', '기타'))
-    # job = forms.CharField(choices=job_Choices)
     job = forms.ChoiceField(choices=job_Choices)
+    birth = forms.DateField(widget=DateInput())
+    email = forms.EmailField()
 
 
     class Meta:
@@ -45,7 +50,21 @@ class CustomUserChangeForm(UserChangeForm):
     , ('soldier', '군인'), ('etc', '기타'))
 
     job = forms.ChoiceField(choices=job_Choices)
+    birth = forms.DateField(widget=DateInput())
+    email = forms.EmailField()
 
     class Meta:
         model = get_user_model()
         fields = ['memberId', 'name','birth','job', 'nickname','phone', 'email']
+
+    #폼 설정 : read only
+    def __init__(self, *args, **kwargs):
+        super(CustomUserChangeForm, self).__init__(*args, **kwargs)
+        self.fields['memberId'].widget.attrs['readonly'] = True
+        self.fields['name'].widget.attrs['readonly'] = True
+
+            
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email', '')
+        self.email = str(email)

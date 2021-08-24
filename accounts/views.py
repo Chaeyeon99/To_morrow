@@ -96,8 +96,15 @@ def updateProfile(request):
     if request.method == 'POST':
         update_form = CustomUserChangeForm(request.POST, instance=request.user)
         if update_form.is_valid():
+            memberId=request.session.get('user')
+            email = update_form.cleaned_data['email']
+                   
+            if Member.objects.filter(memberId=memberId).exists() :
+                member = Member.objects.get(memberId=memberId)
+                member.email = email
+                member.save()
+
             update_form.save()
-            context = { 'update_form' : update_form   }
             MESSAGE_LEVEL = messages_constants.SUCCESS
             messages.add_message(request, messages.INFO, '정보 수정에 성공했습니다.')
             return redirect('/accounts/profile', request.user.memberId)

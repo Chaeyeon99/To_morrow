@@ -8,12 +8,14 @@
         </script>
 	{% endfor %}
     {% endif %}
-    <form action="{% url 'letter:writeToMe' %}" method="post">
+
+    <form action="{% url 'letter:writeToOthers' %}" method="post">
         {% csrf_token %}
         {{ write_form.as_p }}
+        <label><input type="radio" name="way_to_send" value="one" checked>그룹 내 1명 만</label>
+        <label><input type="radio" name="way_to_send" value="all">그룹 내 모든 사용자 </label><br>
         <input type="submit" value="OK">
     </form>
-
 </body>
 </html>
 
