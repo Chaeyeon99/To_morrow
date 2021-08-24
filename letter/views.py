@@ -165,10 +165,46 @@ def to_me(request):
                     for allreceive in receiveInfo:
                         letter_ids = allreceive.letterId
                         letter_id = letter_ids.letterId
-                        if Letter.objects.all().filter(letterId = letter_id):
-                            result.append( Letter.objects.get(letterId = letter_id))
+                        letter_obj = Letter.objects.get(letterId = letter_id)
+
+                        if str(letter_obj.senderId) == str(memberId):
+                            result.append(letter_obj)
             
         except member.DoesNotExist:
             raise Http404("Error!")
 
     return render(request, 'letter/to_me.html', {'result':result, 'nickname' : nickname })
+
+
+
+# 타인에게 받은 목록 
+@login_required
+def letterFrmOthers(request):
+    if not request.session.get('user'): 
+        return redirect('/accounts/login')
+
+    if request.method=='GET':
+        try:
+            memberId=request.session.get('user')
+            result=[]
+
+            #멤버에 해당 로그인 사용자가 존재하는지
+            if Member.objects.filter(memberId=memberId).exists():
+                member=Member.objects.get(memberId=memberId)
+                nickname=member.nickname
+
+                if Receiveletter.objects.filter(receiverId=memberId):
+                    receiveInfo=Receiveletter.objects.all().filter(receiverId=memberId) #수신자가 나인 편지 필터링
+                    for allreceive in receiveInfo:
+                        letter_ids = allreceive.letterId
+                        letter_id = letter_ids.letterId
+                        letter_obj = Letter.objects.get(letterId = letter_id)
+
+                        if str(letter_obj.senderId) != str(memberId):
+                            print(letter_obj.senderId,memberId)
+                            result.append(letter_obj)
+            
+        except member.DoesNotExist:
+            raise Http404("Error!")
+
+    return render(request, 'letter/letterFrmOthers.html', {'result':result, 'nickname' : nickname })    

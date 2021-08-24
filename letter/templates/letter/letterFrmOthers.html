@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>receive letter</h2>
+<h3>To, morrow mesage for {{ nickname }} </h3>
+
+<table>
+<tr>
+    <td>Idx</td>
+    <td>Sender</td>
+    <td>Contents&nbsp;&nbsp;&nbsp;</td>
+    <td>SendDate</td>
+</tr>
+
+{% for frmOthers in result %}
+    <tr>
+        <td>{{frmOthers.letterId}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{frmOthers.senderId}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{frmOthers.content}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{frmOthers.sendDate}}</td>
+    </tr>
+{% endfor %}
+</table>
+
+</body>
+</html>
