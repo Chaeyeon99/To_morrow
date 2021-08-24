@@ -29,5 +29,5 @@ class Receiveletter(models.Model):
     receiveCol = models.AutoField(primary_key=True)  # Field name made lowercase.
     letterId = models.ForeignKey(Letter, null=True, on_delete=models.SET_NULL, db_column='letterId') #letter 테이블과 연결된 외래키
     receiverId = models.OneToOneField(accounts_models.Member, null=True, on_delete=models.SET_NULL, db_column='receiverid')
-    readCheck = models.IntegerField(db_column='readCheck')  # Field name made lowercase.
+    readCheck = models.IntegerField(db_column='readCheck', default=False)  # Field name made lowercase.
 
