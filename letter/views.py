@@ -7,6 +7,7 @@ from letter.forms import NameForm, WriteForm
 from letter.models import Letter, Receiveletter
 from django.contrib.auth.decorators import login_required
 from accounts.models import Member
+from django.db import transaction
 #from google.cloud import language_v1
 #client = language_v1.LanguageServiceClient.from_service_account_json(r'C:\Users\samsung\Desktop\django_study\service_account.json')
 
@@ -37,13 +38,37 @@ def emotion_result(request):
 
     return redirect('letter/emotion_result')
 
+#원본 write
+# def write(request):
+#     if not request.session.get('user'): 
+#         return redirect('/accounts/login')
+    
+#     if request.method == 'POST':
+#         memberId=request.session.get('user')
+#         member = Member.objects.get(memberId=memberId)
+
+#         write_form = WriteForm(request.POST)
+#         if write_form.is_valid():
+#             letter = Letter(
+#                 senderId = member,
+#                 content=write_form.content,
+#                 receiveDate=write_form.receiveDate,
+#                 emotion=1,
+#             )
+
+#             letter.save()
+#             return  redirect('/accounts', request.user.memberId)
+#     else:
+#         write_form = WriteForm()
+#         context = {'write_form': write_form}
+#     return render(request, 'letter/write.html', context)
 
 def write(request):
     if not request.session.get('user'): 
         return redirect('/accounts/login')
     
     if request.method == 'POST':
-        memberId=request.session.get('user')
+        memberId = request.session.get('user')
         member = Member.objects.get(memberId=memberId)
 
         write_form = WriteForm(request.POST)
@@ -54,15 +79,50 @@ def write(request):
                 receiveDate=write_form.receiveDate,
                 emotion=1,
             )
-
             letter.save()
+            
+            letter_id = Letter.objects.get(letterId=6)
+
+            receiveLetter = Receiveletter()
+            receiveLetter.letterId = letter_id
+            receiveLetter.receiverId = member
+            receiveLetter.readCheck = False
+            receiveLetter.save()
+            
             return  redirect('/accounts', request.user.memberId)
     else:
         write_form = WriteForm()
         context = {'write_form': write_form}
     return render(request, 'letter/write.html', context)
+# def write(request):
+#     if not request.session.get('user'): 
+#         return redirect('/accounts/login')
+    
+#     if request.method == 'POST':
+#         memberId=request.session.get('user')
+#         member = Member.objects.get(memberId=memberId)
 
+#         write_form = WriteForm(request.POST)
+#         if write_form.is_valid():
+#             letter = Letter(
+#                 senderId = member,
+#                 content=write_form.content,
+#                 receiveDate=write_form.receiveDate,
+#                 emotion=1,
+#             )
 
+#             receive_letter = Receiveletter(
+#                 receiverId 
+#                 readCheck
+
+#             )
+
+#             letter.save()
+#             return  redirect('/accounts', request.user.memberId)
+#     else:
+#         write_form = WriteForm()
+#         context = {'write_form': write_form}
+#     return render(request, 'letter/write.html', context)
 
 #남이 나에게 보낸 메시지 목록
 @login_required

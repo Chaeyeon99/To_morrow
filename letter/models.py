@@ -10,7 +10,7 @@ class Letter(models.Model):
 
     letterId = models.AutoField(primary_key=True)
     senderId = models.ForeignKey(accounts_models.Member, null=True, on_delete=models.SET_NULL, db_column='senderId') #acounts.member 테이블과 연결된 외래키
-    content = models.CharField(max_length=1000, db_column='content')
+    content = models.CharField(max_length=10000, db_column='content')
     sendDate = models.DateTimeField(auto_now_add=True, db_column='sendDate')  # Field name made lowercase.
     receiveDate = models.DateTimeField(db_column='receiveDate')  # Field name made lowercase.
     emotion=models.IntegerField(null=True)
