@@ -1,0 +1,37 @@
+{% if member %}
+
+<h1> USER : {{member.memberId}}</h1>
+
+<h2>사용자 정보</h2>
+    <table style= "border-collapse:separate ; border:2px gray solid" >
+        <tr>
+            <td>아이디 </td>
+            <td>{{member.memberId}}</td>
+        </tr>
+        <tr>
+            <td>이름 </td>
+            <td>{{member.name}}</td>
+        </tr>
+        <tr>
+            <td>생년월일  </td>
+            <td>{{member.birth}}</td>
+        </tr>
+        <tr>
+            <td>닉네임 </td>
+            <td>{{member.nickname}}</td>
+        </tr>
+        <tr>
+            <td>직업  </td>
+            <td>{{member.job}}</td>
+        </tr>
+        <tr>
+            <td> 전화번호   </td>
+            <td>{{member.phone}}</td>
+        </tr>
+        <tr>
+            <td> 이메일   </td>
+            <td>{{member.email}}</td>
+        </tr>
+    </table>
+
+{% endif %}

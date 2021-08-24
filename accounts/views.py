@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
-from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect, Http404
+from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.hashers import make_password, check_password
 
 
@@ -34,15 +34,13 @@ def login_view(request):
         form = AuthenticationForm(request=request, data=request.POST)
 
         if form.is_valid():
-            print("cleaned_data : ", form.cleaned_data)
             login_memberId = form.cleaned_data['username']
-            print("memberId : ", login_memberId)
             raw_password = form.cleaned_data['password']
             member = Member.objects.get(memberId=login_memberId)
         
             if check_password(raw_password, member.password):
                 memberId = authenticate(username=login_memberId, password=raw_password)
-                print("auth user : ", memberId)
+
                 login(request, memberId) 
                 request.session['user']=member.memberId
                 return redirect('/accounts')
@@ -63,3 +61,26 @@ def logout_view(request):
         return HttpResponseRedirect('/accounts')
     else :
         print('로그아웃 불가. 로그인하고 오세요.')
+
+
+# 개인 페이지
+def profile(request):
+    if not request.session.get('user'): 
+        return redirect('/accounts/login')
+        
+    if request.method =='GET':
+        try:
+            memberId=request.session.get('user')
+                   
+            if Member.objects.filter(memberId=memberId).exists() :
+                member = Member.objects.get(memberId=memberId)
+                name = member.name
+
+                if Member.objects.filter(name=name).exists(): 
+                    member=Member.objects.get(name=name)
+                    context={'member' : member, 'name': name}
+
+        except member.DoesNotExist: 
+                raise Http404("member does not exist")
+
+        return render(request, 'accounts/profile.html',context)  
