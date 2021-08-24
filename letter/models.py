@@ -29,7 +29,7 @@ class Receiveletter(models.Model):
 
     receiveCol = models.AutoField(primary_key=True)  # Field name made lowercase.
     letterId = models.ForeignKey(Letter, null=True, on_delete=models.SET_NULL, db_column='letterId') #letter 테이블과 연결된 외래키
-    receiverId = models.OneToOneField(accounts_models.Member, null=True, on_delete=models.SET_NULL, db_column='receiverid')
+    receiverId = models.ForeignKey(accounts_models.Member, null=True, on_delete=models.SET_NULL, db_column='receiverid')
     readCheck = models.BooleanField(db_column='readCheck', default=False)  # Field name made lowercase.
     is_deleted = models.BooleanField(db_column='is_deleted', default=False)
 
@@ -40,5 +40,5 @@ class Sendletter(models.Model):
 
     sendCol = models.AutoField(primary_key=True)  # Field name made lowercase.
     letterId = models.ForeignKey(Letter, null=True, on_delete=models.SET_NULL, db_column='letterId') #letter 테이블과 연결된 외래키
-    senderId = models.OneToOneField(accounts_models.Member, null=True, on_delete=models.SET_NULL, db_column='senderId')
+    senderId = models.ForeignKey(accounts_models.Member, null=True, on_delete=models.SET_NULL, db_column='senderId')
     is_deleted = models.BooleanField(db_column='is_deleted', default=False)
