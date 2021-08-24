@@ -163,12 +163,12 @@ def to_me(request):
                 if Receiveletter.objects.filter(receiverId=memberId):
                     receiveInfo=Receiveletter.objects.all().filter(receiverId=memberId) #수신자가 나인 편지 필터링
                     for allreceive in receiveInfo:
-                        if Letter.objects.filter(senderId=memberId):
-                            tomeInfo=Letter.objects.all()
-                    for alltome in tomeInfo:
-                        result.append(alltome)
+                        letter_ids = allreceive.letterId
+                        letter_id = letter_ids.letterId
+                        if Letter.objects.all().filter(letterId = letter_id):
+                            result.append( Letter.objects.get(letterId = letter_id))
             
         except member.DoesNotExist:
             raise Http404("Error!")
 
-    return render(request, 'letter/to_me.html', {'result':result})
+    return render(request, 'letter/to_me.html', {'result':result, 'nickname' : nickname })
