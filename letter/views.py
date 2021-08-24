@@ -39,7 +39,7 @@ def emotion_result(request):
     return redirect('letter/emotion_result')
 
 
-def write(request):
+def writeToMe(request):
     if not request.session.get('user'): 
         return redirect('/accounts/login')
     
@@ -80,7 +80,7 @@ def write(request):
     else:
         write_form = WriteForm()
         context = {'write_form': write_form}
-    return render(request, 'letter/write.html', context)
+    return render(request, 'letter/writeToMe.html', context)
 
 
 #남이 나에게 보낸 메시지 목록

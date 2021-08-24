@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <body>
-    <form action="{% url 'letter:write' %}" method="post">
+    <form action="{% url 'letter:writeToMe' %}" method="post">
         {% csrf_token %}
         {{ write_form.as_p }}
         <input type="submit" value="OK">
