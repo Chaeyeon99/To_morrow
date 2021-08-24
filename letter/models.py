@@ -31,4 +31,3 @@ class Receiveletter(models.Model):
     receiverId = models.OneToOneField(accounts_models.Member, null=True, on_delete=models.SET_NULL, db_column='receiverid')
     readCheck = models.IntegerField(db_column='readCheck')  # Field name made lowercase.
 
-    

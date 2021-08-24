@@ -80,11 +80,13 @@ def write(request):
                 emotion=1,
             )
             letter.save()
+            letter_id=letter.letterId
+            now_letter=Letter.objects.get(letterId=letter_id)
             
-            letter_id = Letter.objects.get(letterId=6)
+            # letter_id = Letter.objects.get(letterId=letter.letterId)
 
             receiveLetter = Receiveletter()
-            receiveLetter.letterId = letter_id
+            receiveLetter.letterId = now_letter
             receiveLetter.receiverId = member
             receiveLetter.readCheck = False
             receiveLetter.save()
