@@ -1,4 +1,13 @@
 <h2>Index 페이지 </h2>
+{% if messages %}
+	{% for message in messages %}
+        <script>
+            alert('{{ message }}');
+        </script>
+	{% endfor %}
+{% endif %}
+
+
 {% if user.is_active %} 
     로그인 상태
     <p>Welcome, <b>{{ user.name }}. </b>Thanks for logging in.</p>

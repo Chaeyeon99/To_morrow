@@ -6,6 +6,8 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import constants as messages_constants
 from django.contrib import messages
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 from .forms import UserCreationForm, CustomUserChangeForm
 from .models import Member
@@ -16,7 +18,6 @@ def Index (request):
     return render(request,'accounts/Index.html',None) 
 
 # 회원가입
-
 def signup(request): 
     if request.method == "POST":
         form = UserCreationForm(request.POST)
@@ -89,7 +90,7 @@ def profile(request):
 
         return render(request, 'accounts/profile.html',context)  
 
-
+# 개인정보 수정 
 @login_required
 def updateProfile(request):
     if request.method == 'POST':
@@ -106,3 +107,25 @@ def updateProfile(request):
         update_form = CustomUserChangeForm(instance = request.user)
         context = { 'update_form' : update_form   }
         return render(request, 'accounts/update.html', context) 
+
+
+# 패스워드 변경 
+def password(request):
+    if request.method == "POST":
+        password_change_form = PasswordChangeForm(request.user, request.POST)
+        
+        if password_change_form.is_valid():
+            user = password_change_form.save()
+            update_session_auth_hash(request, user)
+            messages.add_message(request, messages.INFO, '비밀번호 변경에 성공했습니다.')
+            return redirect('/accounts', request.user.memberId)
+        else: 
+            messages.error(request, '비밀번호 실패 다시 시도해주세요')
+            return redirect('/accounts/password', request.user.memberId)
+    else:
+        password_change_form = PasswordChangeForm(request.user)
+        context = {
+            'password_change_form': password_change_form
+        }
+        
+        return render(request, 'accounts/password.html', context)
