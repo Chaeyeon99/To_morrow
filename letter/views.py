@@ -3,7 +3,7 @@ import accounts
 from accounts.models import Member
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponseRedirect
-from letter.forms import NameForm, WriteForm, WriteForm_toOthers
+from letter.forms import NameForm, WriteForm, WriteFormOthers
 from letter.models import Letter, Receiveletter, Sendletter
 from django.contrib.auth.decorators import login_required
 from accounts.models import Member
@@ -13,12 +13,6 @@ from django.contrib import messages
 from random import *
 #from google.cloud import language_v1
 #client = language_v1.LanguageServiceClient.from_service_account_json(r'C:\Users\samsung\Desktop\django_study\service_account.json')
-
-
-
-def emotion_result(request):
-
-    return redirect('letter/emotion_result')
 
 
 def writeToMe(request):
@@ -78,7 +72,7 @@ def writeToOthers(request):
         memberId = request.session.get('user')
         now_member = Member.objects.get(memberId=memberId)
 
-        write_form = WriteForm_toOthers(request.POST)
+        write_form = WriteFormOthers(request.POST)
     
         if write_form.is_valid():
             # 선택한 그룹에 속한 사용자가 0명이라, 편지를 보내지 않는 경우 
@@ -92,7 +86,7 @@ def writeToOthers(request):
 
             if is_user_exist == False: 
                 messages.error(request, '해당 그룹에 속한 사용자가 없어, 전송이 취소되었습니다.')            
-                return render(request, 'letter/writeToOthers.html',  {'write_form': WriteForm_toOthers})
+                return render(request, 'letter/writeToOthers.html',  {'write_form': WriteFormOthers})
             else :
 
                 letter = Letter(
@@ -144,69 +138,37 @@ def writeToOthers(request):
                 return  redirect('/accounts', request.user.memberId)
         else:
             messages.error(request, '전송 실패. 다시 시도해주세요')
-            return render(request, 'letter/writeToOthers.html',  {'write_form': WriteForm_toOthers})
+            return render(request, 'letter/writeToOthers.html',  {'write_form': WriteFormOthers})
     else:
         write_form = WriteForm()
-        return render(request, 'letter/writeToOthers.html',  {'write_form': WriteForm_toOthers})
+        return render(request, 'letter/writeToOthers.html',  {'write_form': WriteFormOthers})
 
 
 
-
-
-#남이 나에게 보낸 메시지 목록
+#나에게 보낸 메시지 목록
 @login_required
-def receive(request):
+def to_me(request):
     if not request.session.get('user'): 
         return redirect('/accounts/login')
     if request.method=='GET':
         try:
             memberId=request.session.get('user')
+            result=[]
 
+            #멤버에 해당 로그인 사용자가 존재하는지
             if Member.objects.filter(memberId=memberId).exists():
-                # member=Member.objects.get(memberId=memberId)
-                # nickname=member.nickname
+                member=Member.objects.get(memberId=memberId)
+                nickname=member.nickname
 
-                if Receiveletter.objects.filter(receiverid=memberId).exists():
-                    tmp= Receiveletter.objects.all(receiverid=memberId)
-                    for receiveLetter in tmp :
-                        letter_content = Letter.objects.get(receiveLetter.letterId).content
-                        print(letter_content)
-                    # receiveletter=Receiveletter.objects.get()
-                    # contents=Letter.content
-
-                # if Member.objects.filter(nickname=nickname).exists():
-                #     member=Member.objects.get(nickname=nickname)
-                #     context={'member':member, 'nickname':nickname, 'letter':Letter}
+                if Receiveletter.objects.filter(receiverId=memberId):
+                    receiveInfo=Receiveletter.objects.all().filter(receiverId=memberId) #수신자가 나인 편지 필터링
+                    for allreceive in receiveInfo:
+                        if Letter.objects.filter(senderId=memberId):
+                            tomeInfo=Letter.objects.all()
+                    for alltome in tomeInfo:
+                        result.append(alltome)
+            
         except member.DoesNotExist:
             raise Http404("Error!")
 
-    return render(request, 'letter/receive.html')
-
-    #context={'letter':Letter, 'receiveletter':Receiveletter, 'member':Member}
-    #letter={'letter': Letter.objects.all()}
-    #receiveletter={'receiveletter': Receiveletter.objects.all()}
-    #return render(request, 'letter/receive.html', context)
-
-#나에게 보낸 메시지 목록
-def to_me(request):
-    letter={'letter': Letter.objects.all()}
-    receiveletter={'receiveletter': Receiveletter.objects.all()}
-    sendletter={'sendletter':Letter.objects.all()}
-    return render(request, 'letter/to_me.html')
-
-#메시지 상세 페이지
-def message_detail(request, letter_id):
-    letter = get_object_or_404(Letter, pk=letter_id)
-    return render(request, 'letter/message_detail.html', {'letter':letter})
-
-#남이 나에게 보낸 메시지 목록 삭제
-def delete_from_other(request, letter_id):
-    letter=Letter.objects.get(pk=letter_id)
-    letter.delete()
-    return redirect('receive')
-
-#내가 나에게 보낸 메시지 목록 삭제
-def delete_from_me(request, letter_id):
-    letter=Letter.objects.get(pk=letter_id)
-    letter.delete()
-    return redirect('to_me')
+    return render(request, 'letter/to_me.html', {'result':result})

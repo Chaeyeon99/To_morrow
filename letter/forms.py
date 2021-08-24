@@ -47,7 +47,7 @@ class WriteForm(forms.ModelForm):
 
 
 # 타인에게 쓰는 편지 폼 
-class WriteForm_toOthers(forms.ModelForm):
+class WriteFormOthers(forms.ModelForm): # WriteForm_toOthers -> WriteFormOthers
 
     job_Choices=(('education', '교육자'), ('student', '학생'), ('business', '자영업자'), ('medical', '의료직')
     , ('artist', '예술인'), ('sports', '운동인'), ('office', '직장인'), ('finance', '금융'), ('IT', 'IT')
