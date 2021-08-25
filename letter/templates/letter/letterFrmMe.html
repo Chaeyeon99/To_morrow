@@ -11,16 +11,20 @@
     <td>Contents&nbsp;&nbsp;&nbsp;</td>
     <td>SendDate</td>
 </tr>
-
+{% if messages %}
+{% for message in messages %}
+    <script>
+        alert('{{ message }}');
+    </script>
+{% endfor %}
+{% endif %}
 {% for toMe in result %}
     <tr>
-        <div onclick="location.href='/letter/receive/detail/{{ toMe.letterId }}?next={{'">
-            <td>{{toMe.letterId}}&nbsp;&nbsp;&nbsp;</td>
-            <td>{{toMe.senderId}}&nbsp;&nbsp;&nbsp;</td>
-            <td>{{toMe.content}}&nbsp;&nbsp;&nbsp;</td>
-            <td>{{toMe.sendDate | date:"Y.m.d H:i "}}</td>
-        </div>
-        <td onclick="location.href='/letter/delreceive/{{toMe.letterId}}/'">쓰레기통</td>
+        <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{toMe.letterId}}&nbsp;&nbsp;&nbsp;</td>
+        <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{toMe.senderId}}&nbsp;&nbsp;&nbsp;</td>
+        <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{toMe.content}}&nbsp;&nbsp;&nbsp;</td>
+        <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{toMe.sendDate | date:"Y.m.d H:i "}}</td>
+        <td onClick="location.href='/letter/delreceive/{{toMe.letterId}}/'">쓰레기통</td>
     </tr>
 {% endfor %}
 </table>

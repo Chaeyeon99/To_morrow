@@ -269,11 +269,16 @@ def sentletter_detail(request, letterId):
 def letterIsent (request):
     memberId = request.session.get('user')
     letters = Letter.objects.all().filter(senderId=memberId)
-    # result = []
-    # for letter in Letter.objects.all().filter(senderId=memberId): 
-    #     result.append(letter)
 
-    return render(request, 'letter/letterIsent.html', {'letters': letters })
+    result= []
+    
+    for letter in letters:
+        letter_id = letter.letterId
+        sendletter_obj = Sendletter.objects.get(letterId=letter_id)
+        if sendletter_obj.is_deleted == False: 
+            result.append(letter)
+
+    return render(request, 'letter/letterIsent.html', {'letters': result })
 
 
 
@@ -287,7 +292,7 @@ def letter_delete_send(request, letterId):
 
     context = {'senddelete': send_letter_delete}
     messages.add_message(request, messages.INFO, '보낸 메시지 삭제 성공.')
-    return render(request, 'letter/show_delete_list.html', context)
+    return HttpResponseRedirect("/letter/letterIsent/")
 
 
 #받은 메시지 삭제 기능
@@ -297,11 +302,21 @@ def letter_delete_receive(request, letterId):
     receive_letter_delete=Receiveletter.objects.all().filter(receiverId=memberId).get(letterId=letterId)
     receive_letter_delete.is_deleted = True
     receive_letter_delete.save()
+    sender_id = Sendletter.objects.get(letterId=letterId).senderId
+    print("Sender id : ", sender_id)
 
-    context = {'receivedelelte': receive_letter_delete}
     messages.add_message(request, messages.INFO, '받은 메시지 삭제 성공.')
-    return render(request, 'letter/show_delete_list.html', context)
-
+    print("전달받은 letterid : ", letterId)
+    
+    #타인에게 받은 편지와 내가 나에게 쓴 편지를 확인해야 함
+    if str(sender_id)==str(memberId):
+        print("in")
+        return HttpResponseRedirect("/letter/letterFrmMe/")
+    else:
+        print("else")
+        return HttpResponseRedirect("/letter/letterFrmOthers/")
+    
+    
 #휴지통 목록 (send용)
 def show_delete_list(request, page):
     if not request.session.get('user'): 

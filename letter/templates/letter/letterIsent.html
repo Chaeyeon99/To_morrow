@@ -12,6 +12,14 @@
     <td>SendDate</td>
 </tr>
 
+{% if messages %}
+{% for message in messages %}
+    <script>
+        alert('{{ message }}');
+    </script>
+{% endfor %}
+{% endif %}
+
 {% for letter in letters %}
     <tr>
 
