@@ -13,11 +13,12 @@
 </tr>
 recvLetter_result
 {% for frmOthers in result %}
-    <tr onclick="location.href='/letter/receive/detail/{{ frmOthers.letterId }}/'"">
+    <tr onclick="location.href='/letter/receive/detail/{{ frmOthers.letterId }}/'">
         <td>{{frmOthers.letterId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{frmOthers.senderId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{frmOthers.content}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{frmOthers.sendDate}}</td>
+        <td onclick="location.href='/letter/delreceive/{{frmOthers.letterId}}/'">쓰레기통</td>
     </tr>
 {% endfor %}
 </table>
