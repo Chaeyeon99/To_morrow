@@ -14,12 +14,12 @@
 
 {% for toMe in result %}
     <tr>
-        <li onclick="location.href='/letter/receive/detail/{{ toMe.letterId }}?next={{'">
+        <div onclick="location.href='/letter/receive/detail/{{ toMe.letterId }}?next={{'">
             <td>{{toMe.letterId}}&nbsp;&nbsp;&nbsp;</td>
             <td>{{toMe.senderId}}&nbsp;&nbsp;&nbsp;</td>
             <td>{{toMe.content}}&nbsp;&nbsp;&nbsp;</td>
             <td>{{toMe.sendDate | date:"Y.m.d H:i "}}</td>
-        </li>
+        </div>
         <td onclick="location.href='/letter/delreceive/{{toMe.letterId}}/'">쓰레기통</td>
     </tr>
 {% endfor %}

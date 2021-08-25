@@ -281,7 +281,7 @@ def letterIsent (request):
 def letter_delete_send(request, letterId):
     memberId = request.session.get('user')
 
-    send_letter_delete=Sendletter.objects.all().filter(letterId=letterId)
+    send_letter_delete=Sendletter.objects.get(letterId=letterId)
     send_letter_delete.is_deleted = True
     send_letter_delete.save()
 
@@ -293,7 +293,7 @@ def letter_delete_send(request, letterId):
 def letter_delete_receive(request, letterId):
     memberId = request.session.get('user')
 
-    receive_letter_delete=Receiveletter.objects.all().filter(letterId=letterId)
+    receive_letter_delete=Receiveletter.objects.all().filter(receiverId=memberId).get(letterId=letterId)
     receive_letter_delete.is_deleted = True
     receive_letter_delete.save()
 
@@ -329,7 +329,7 @@ def show_delete_list(request):
                 if Receiveletter.objects.filter(is_deleted=True):
                     receive_delete_list=Receiveletter.objects.all().filter(is_deleted=True)
                     for receive_col in receive_delete_list:
-                        letter_ids = Receiveletter.letterId
+                        letter_ids = receive_col.letterId
                         letter_id = letter_ids.letterId
                         letter_obj = Letter.objects.get(letterId = letter_id)
                         resultreceive.append(letter_obj)
