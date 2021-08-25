@@ -14,7 +14,6 @@ urlpatterns = [
     path('letterIsent/', views.letterIsent, name='letterIsent'),
     path('delsend/<int:letterId>/',views.letter_delete_send,name='letter_delete_send'),
     path('delreceive/<int:letterId>/',views.letter_delete_receive, name='letter_delete_receive'),
-
-    path('trash/',views.show_delete_list, name='show_delete_list')
+    path('trash/<str:page>/',views.show_delete_list, name='show_delete_list')
     
 ]

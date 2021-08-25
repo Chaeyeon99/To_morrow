@@ -13,11 +13,14 @@
 </tr>
 
 {% for letter in letters %}
-    <tr onclick="location.href='/letter/send/detail/{{ letter.letterId }}/'"">
+    <tr>
+
+    <div onclick="location.href='/letter/send/detail/{{ letter.letterId }}/'">
         <td>{{letter.letterId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{letter.senderId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{letter.content}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{letter.sendDate | date:"Y.m.d H:i "}}</td>
+    </div>
         <td onclick="location.href='/letter/delsend/{{letter.letterId}}/'">쓰레기통</td>
     </tr>
 {% endfor %}

@@ -289,6 +289,7 @@ def letter_delete_send(request, letterId):
     messages.add_message(request, messages.INFO, '보낸 메시지 삭제 성공.')
     return render(request, 'letter/show_delete_list.html', context)
 
+
 #받은 메시지 삭제 기능
 def letter_delete_receive(request, letterId):
     memberId = request.session.get('user')
@@ -301,39 +302,43 @@ def letter_delete_receive(request, letterId):
     messages.add_message(request, messages.INFO, '받은 메시지 삭제 성공.')
     return render(request, 'letter/show_delete_list.html', context)
 
-#휴지통 목록
-def show_delete_list(request):
+#휴지통 목록 (send용)
+def show_delete_list(request, page):
     if not request.session.get('user'): 
         return redirect('/accounts/login')
     if request.method=='GET':
         try:
             memberId=request.session.get('user')
-            resultsend=[]
-            resultreceive=[]
+            result=[]
+         
 
             #멤버에 해당 로그인 사용자가 존재하는지
             if Member.objects.filter(memberId=memberId).exists():
                 member=Member.objects.get(memberId=memberId)
                 nickname=member.nickname
 
-                #보낸 메시지 중 삭제한 목록
-                if Sendletter.objects.filter(senderId=memberId):
-                    send_delete_list=Sendletter.objects.all().filter(is_deleted=True) #is_deleted가 True인 삭제된 메시지 필터링
-                    for send_col in send_delete_list:
-                        letter_ids = Sendletter.letterId
-                        letter_id = letter_ids.letterId
-                        letter_obj = Letter.objects.get(letterId = letter_id)
-                        resultsend.append(letter_obj)
-                
-                #받은 메시지 중 삭제한 목록
-                if Receiveletter.objects.filter(is_deleted=True):
-                    receive_delete_list=Receiveletter.objects.all().filter(is_deleted=True)
-                    for receive_col in receive_delete_list:
-                        letter_ids = receive_col.letterId
-                        letter_id = letter_ids.letterId
-                        letter_obj = Letter.objects.get(letterId = letter_id)
-                        resultreceive.append(letter_obj)
 
+                if str(page)=='send':
+                    #보낸 메시지 중 삭제한 목록 (send)
+                    if Sendletter.objects.filter(senderId=memberId):
+                        send_delete_list=Sendletter.objects.all().filter(is_deleted=True) #is_deleted가 True인 삭제된 메시지 필터링
+                        for send_col in send_delete_list:
+                            letter_ids = send_col.letterId
+                            letter_id = letter_ids.letterId
+                            letter_obj = Letter.objects.get(letterId = letter_id)
+                            result.append(letter_obj)
+                            
+                if str(page)=='receive':
+                    #받은 메시지 중 삭제한 목록 (receive)
+                    if Receiveletter.objects.filter(is_deleted=True):
+                        receive_delete_list=Receiveletter.objects.all().filter(is_deleted=True)
+                        for receive_col in receive_delete_list:
+                            letter_ids = receive_col.letterId
+                            letter_id = letter_ids.letterId
+                            letter_obj = Letter.objects.get(letterId = letter_id)
+                            result.append(letter_obj)
+
+            return render(request, 'letter/show_delete_list.html', {'result':result, 'nickname' : nickname, 'page':page})                
         except member.DoesNotExist:
             raise Http404("Error!")
-    return render(request, 'letter/show_delete_list.html', {'resultsend':resultsend, 'resultreceive':resultreceive, 'nickname' : nickname })
+    return render(request, 'letter/show_delete_list.html', {'result':result, 'nickname' : nickname, 'page':page})
