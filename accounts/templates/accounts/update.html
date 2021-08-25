@@ -3,8 +3,6 @@
 
 {% if messages %}
 	{% for message in messages %}
-		{{ message.tags }}
-		{{ message.message }}
         <script>
             alert('{{ message }}');
         </script>

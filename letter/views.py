@@ -11,6 +11,7 @@ from django.db import transaction
 from django.contrib.messages import constants as messages_constants
 from django.contrib import messages
 from random import *
+from datetime import datetime
 #from google.cloud import language_v1
 #client = language_v1.LanguageServiceClient.from_service_account_json(r'C:\Users\samsung\Desktop\django_study\service_account.json')
 
@@ -24,7 +25,14 @@ def writeToMe(request):
         now_member = Member.objects.get(memberId=memberId)
 
         write_form = WriteForm(request.POST)
+
         if write_form.is_valid():
+            receive_date=write_form.receiveDate
+
+            if receive_date < datetime.now():
+                messages.add_message(request, messages.INFO, '받는 날짜를 현재 시간 이후로 설정해주세요.')
+                context = {'write_form': write_form}
+                return render(request, 'letter/writeToMe.html', context)
 
             # document = language_v1.Document(content=write_form.content, type_=language_v1.Document.Type.PLAIN_TEXT)
             # sentiment_doc = client.analyze_sentiment(request={'document': document}).document_sentiment
@@ -73,8 +81,15 @@ def writeToOthers(request):
         now_member = Member.objects.get(memberId=memberId)
 
         write_form = WriteFormOthers(request.POST)
+
     
         if write_form.is_valid():
+            receive_date=write_form.receiveDate
+
+            if receive_date < datetime.now():
+                messages.add_message(request, messages.INFO, '받는 날짜를 현재 시간 이후로 설정해주세요.')
+                context = {'write_form': write_form}
+                return render(request, 'letter/writeToOthers.html', context)
             # 선택한 그룹에 속한 사용자가 0명이라, 편지를 보내지 않는 경우 
             is_user_exist = False
 
@@ -162,13 +177,23 @@ def to_me(request):
 
                 if Receiveletter.objects.filter(receiverId=memberId):
                     receiveInfo=Receiveletter.objects.all().filter(receiverId=memberId) #수신자가 나인 편지 필터링
-                    for allreceive in receiveInfo:
-                        letter_ids = allreceive.letterId
+                    for recvLetter_col in receiveInfo:
+                        letter_ids = recvLetter_col.letterId
                         letter_id = letter_ids.letterId
                         letter_obj = Letter.objects.get(letterId = letter_id)
+                        recv_date=letter_obj.receiveDate
+                        now_time=datetime.now()
 
                         if str(letter_obj.senderId) == str(memberId):
-                            result.append(letter_obj)
+                            # 삭제된 거 전처리
+                            if recvLetter_col.is_deleted == False :
+                                # 뿌리는 내용 전처리 
+                                if recvLetter_col.readCheck == False :
+                                    letter_obj.content = "(읽지 않음)"
+                                    
+                                if recv_date <= now_time :
+                                    result.append(letter_obj)
+                            
             
         except member.DoesNotExist:
             raise Http404("Error!")
@@ -186,7 +211,8 @@ def letterFrmOthers(request):
     if request.method=='GET':
         try:
             memberId=request.session.get('user')
-            result=[]
+            result = []
+   
 
             #멤버에 해당 로그인 사용자가 존재하는지
             if Member.objects.filter(memberId=memberId).exists():
@@ -195,16 +221,38 @@ def letterFrmOthers(request):
 
                 if Receiveletter.objects.filter(receiverId=memberId):
                     receiveInfo=Receiveletter.objects.all().filter(receiverId=memberId) #수신자가 나인 편지 필터링
-                    for allreceive in receiveInfo:
-                        letter_ids = allreceive.letterId
+                    for recvLetter_col in receiveInfo:
+                        letter_ids = recvLetter_col.letterId
                         letter_id = letter_ids.letterId
                         letter_obj = Letter.objects.get(letterId = letter_id)
+                        recv_date=letter_obj.receiveDate
+                        now_time=datetime.now()
 
                         if str(letter_obj.senderId) != str(memberId):
-                            print(letter_obj.senderId,memberId)
-                            result.append(letter_obj)
-            
+                            # 삭제된 거 전처리
+                            if recvLetter_col.is_deleted == False :
+                                # 뿌리는 내용 전처리 
+                                if recvLetter_col.readCheck == False :
+                                    letter_obj.content = "(읽지 않음)"
+                                #시간비교 조건 넣기
+                                if recv_date <= now_time :
+                                    result.append(letter_obj)
+                                
+                               
         except member.DoesNotExist:
             raise Http404("Error!")
 
     return render(request, 'letter/letterFrmOthers.html', {'result':result, 'nickname' : nickname })    
+
+
+# 글 상세보기
+def letter_detail(request, letterId):
+    memberId = request.session.get('user')
+    letter = Letter.objects.get(letterId=letterId)
+    
+    recv_letter = Receiveletter.objects.all().filter(letterId=letterId).get(receiverId=memberId)
+    recv_letter.readCheck = True
+    recv_letter.save()
+
+    context = {'letter': letter}
+    return render(request, 'letter/letter_detail.html', context)

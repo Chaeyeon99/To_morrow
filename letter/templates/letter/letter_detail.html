@@ -1,0 +1,31 @@
+<h2>letter_detail</h2>
+
+<Table>
+    <tr>
+        <td>letter_id</td>
+        <td>{{letter.letterId}}</td>
+    </tr>
+    <tr>
+        <td>sender</td>
+        <td>{{letter.senderId}}</td>
+    </tr>
+    <tr>
+        <td>receivedate</td>
+        <td>{{letter.receiveDate}}</td>
+    </tr>
+    <tr>
+        <td>content</td>
+        <td>{{letter.content}}</td>
+    </tr>
+    <tr>
+        <td>emotion</td>
+        <td>{{letter.emotion}}</td>
+    </tr>
+</Table>
+<input type="button" value="목록으로" onclick="back()">
+
+<script>
+    const back = () => {
+        window.history.back();
+    }
+</script>

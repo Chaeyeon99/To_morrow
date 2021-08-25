@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html>
 <body>
-<h2>receive letter</h2>
+<h2>receive letter To Me</h2>
 <h3>To, morrow mesage for {{ nickname }} </h3>
 
-{% for toMe in result %}
-    {{toMe.letterId}}&nbsp;&nbsp;&nbsp;
-    {{toMe.content}}&nbsp;&nbsp;&nbsp;
-    {{toMe.sendDate}}<br>
-{% endfor %}
+<table>
+<tr>
+    <td>Idx</td>
+    <td>Sender</td>
+    <td>Contents&nbsp;&nbsp;&nbsp;</td>
+    <td>SendDate</td>
+</tr>
 
+{% for toMe in result %}
+    <tr onclick="location.href='/letter/{{ toMe.letterId }}/'"">
+        <td>{{toMe.letterId}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{toMe.senderId}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{toMe.content}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{toMe.sendDate}}</td>
+    </tr>
+{% endfor %}
+</table>
+<a href="{% url 'accounts:Index' %}"><button>메인화면</button>
 </body>
 </html>

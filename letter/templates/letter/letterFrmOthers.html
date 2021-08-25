@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <body>
-<h2>receive letter</h2>
-<h3>To, morrow mesage for {{ nickname }} </h3>
+<h2>receive letter FROM Others</h2>
+
 
 <table>
 <tr>
@@ -11,9 +11,9 @@
     <td>Contents&nbsp;&nbsp;&nbsp;</td>
     <td>SendDate</td>
 </tr>
-
+recvLetter_result
 {% for frmOthers in result %}
-    <tr>
+    <tr onclick="location.href='/letter/{{ frmOthers.letterId }}/'"">
         <td>{{frmOthers.letterId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{frmOthers.senderId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{frmOthers.content}}&nbsp;&nbsp;&nbsp;</td>
@@ -21,6 +21,6 @@
     </tr>
 {% endfor %}
 </table>
-
+<a href="{% url 'accounts:Index' %}"><button>메인화면</button>
 </body>
 </html>
