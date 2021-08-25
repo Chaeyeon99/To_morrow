@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Trash List</h2>
+
+<table>
+<tr>
+    <td>Idx</td>
+    <td>Sender</td>
+    <td>Contents&nbsp;&nbsp;&nbsp;</td>
+    <td>SendDate</td>
+</tr>
+<p>삭제 목록</p>
+{% for sendDel in resultsend %}
+    <tr onclick="location.href='/letter/{{ sendDel.letterId }}/'"">
+        <td>{{sendDel.letterId}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{sendDel.senderId}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{sendDel.content}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{sendDel.sendDate}}</td>
+    </tr>
+{% endfor %}
+{% for receiveDel in resultreceive%}
+    <tr onclick="location.href='/letter/{{ sendDel.letterId }}/'"">
+        <td>{{receiveDel.letterId}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{receiveDel.senderId}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{receiveDel.content}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{receiveDel.sendDate}}</td>
+{% endfor %}
+</table>
+<a href="{% url 'accounts:Index' %}"><button>메인화면</button>
+</body>
+</html>

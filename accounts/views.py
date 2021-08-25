@@ -24,6 +24,8 @@ def signup(request):
         if form.is_valid():
             form.save()             
             return HttpResponseRedirect('/accounts')
+        else:
+            return render(request, 'accounts/signup.html', {'form': form})
     else:
         form = UserCreationForm()
     return render(request, 'accounts/signup.html', {'form': form})
@@ -70,6 +72,11 @@ def logout_view(request):
 # 개인 페이지
 @login_required
 def profile(request):
+    job_dictionary = { 'educaiton' : '교육자', 'student' : '학생', 'business' : '자영업자',
+    'medical' : '의료직', 'artist' : '예술인', 'sports' : '운동인', 'office' : '직장인', 'finance' : '금융',
+    'IT' : 'IT', 'architect' : '건설', 'public' : '공무원', 'jobseeker' : '취준생', 'housewife' : '주부',
+    'soldier' : '군인', 'etc' : '기타'
+    }
     if not request.session.get('user'): 
         return redirect('/accounts/login')
         
@@ -83,6 +90,8 @@ def profile(request):
 
                 if Member.objects.filter(name=name).exists(): 
                     member=Member.objects.get(name=name)
+                    member.job = job_dictionary[member.job]
+
                     context={ 'member' : member, 'name': name }
 
         except member.DoesNotExist: 
@@ -109,7 +118,7 @@ def updateProfile(request):
             messages.add_message(request, messages.INFO, '정보 수정에 성공했습니다.')
             return redirect('/accounts/profile', request.user.memberId)
         else:
-            print("Update_form ERROR!")
+            return render(request, 'accounts/update.html', {'update_form': update_form})
     else :
         update_form = CustomUserChangeForm(instance = request.user)
         context = { 'update_form' : update_form   }

@@ -4,6 +4,9 @@ from django.contrib.auth.forms import UserCreationForm
 from accounts.models import Member
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from .validation import validate_phone
+
 
 
 class DateInput(forms.DateInput):
@@ -20,6 +23,7 @@ class UserCreationForm(forms.ModelForm):
     job = forms.ChoiceField(choices=job_Choices)
     birth = forms.DateField(widget=DateInput())
     email = forms.EmailField()
+    phone = forms.CharField(validators = [validate_phone])
 
 
     class Meta:
@@ -52,6 +56,8 @@ class CustomUserChangeForm(UserChangeForm):
     job = forms.ChoiceField(choices=job_Choices)
     birth = forms.DateField(widget=DateInput())
     email = forms.EmailField()
+    phone = forms.CharField(validators = [validate_phone])
+
 
     class Meta:
         model = get_user_model()

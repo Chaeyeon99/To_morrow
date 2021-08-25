@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>내가 보낸 편지 목록</h2>
+
+
+<table>
+<tr>
+    <td>Idx</td>
+    <td>Sender</td>
+    <td>Contents&nbsp;&nbsp;&nbsp;</td>
+    <td>SendDate</td>
+</tr>
+
+{% for letter in letters %}
+    <tr onclick="location.href='/letter/send/detail/{{ letter.letterId }}/'"">
+        <td>{{letter.letterId}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{letter.senderId}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{letter.content}}&nbsp;&nbsp;&nbsp;</td>
+        <td>{{letter.sendDate}}</td>
+    </tr>
+{% endfor %}
+</table>
+<a href="{% url 'accounts:Index' %}"><button>메인화면</button>
+</body>
+</html>

@@ -13,7 +13,7 @@
 </tr>
 
 {% for toMe in result %}
-    <tr onclick="location.href='/letter/{{ toMe.letterId }}/'"">
+    <tr onclick="location.href='/letter/receive/detail/{{ toMe.letterId }}?next={{'"">
         <td>{{toMe.letterId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{toMe.senderId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{toMe.content}}&nbsp;&nbsp;&nbsp;</td>

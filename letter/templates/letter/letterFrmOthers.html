@@ -13,7 +13,7 @@
 </tr>
 recvLetter_result
 {% for frmOthers in result %}
-    <tr onclick="location.href='/letter/{{ frmOthers.letterId }}/'"">
+    <tr onclick="location.href='/letter/receive/detail/{{ frmOthers.letterId }}/'"">
         <td>{{frmOthers.letterId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{frmOthers.senderId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{frmOthers.content}}&nbsp;&nbsp;&nbsp;</td>
