@@ -17,7 +17,7 @@
         {% if datetime.now() >= letter.receivedate%}
             {% for letters in letter%}
                 <a href="{% url 'message_detail' letter.letterid %}">{{letter.letterid}}</a>&nbsp;&nbsp;&nbsp;
-                {{letter.receivedate}}&nbsp;&nbsp;
+                {{letter.receivedate | date:"Y.m.d H:i "}}}}&nbsp;&nbsp;
                 {{ letters.content}}
 {% else %}
     <p>Please log in</p>

@@ -212,7 +212,6 @@ def letterFrmOthers(request):
         try:
             memberId=request.session.get('user')
             result = []
-   
             
             #멤버에 해당 로그인 사용자가 존재하는지
             if Member.objects.filter(memberId=memberId).exists():
@@ -288,7 +287,7 @@ def letter_delete_send(request, letterId):
 
     context = {'senddelete': send_letter_delete}
     messages.add_message(request, messages.INFO, '보낸 메시지 삭제 성공.')
-    return render(request, 'letter/trash', context)
+    return render(request, 'letter/trash.html', context)
 
 #받은 메시지 삭제 기능
 def letter_delete_receive(request, letterId):
@@ -300,7 +299,7 @@ def letter_delete_receive(request, letterId):
 
     context = {'receivedelelte': receive_letter_delete}
     messages.add_message(request, messages.INFO, '받은 메시지 삭제 성공.')
-    return render(request, 'letter/trash', context)
+    return render(request, 'letter/trash.html', context)
 
 #휴지통 목록
 def show_delete_list(request, letterId):

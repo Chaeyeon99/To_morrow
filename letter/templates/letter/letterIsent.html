@@ -17,7 +17,7 @@
         <td>{{letter.letterId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{letter.senderId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{letter.content}}&nbsp;&nbsp;&nbsp;</td>
-        <td>{{letter.sendDate}}</td>
+        <td>{{letter.sendDate | date:"Y.m.d H:i "}}</td>
     </tr>
 {% endfor %}
 </table>

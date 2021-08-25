@@ -17,7 +17,7 @@
         <td>{{toMe.letterId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{toMe.senderId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{toMe.content}}&nbsp;&nbsp;&nbsp;</td>
-        <td>{{toMe.sendDate}}</td>
+        <td>{{toMe.sendDate | date:"Y.m.d H:i "}}</td>
     </tr>
 {% endfor %}
 </table>
