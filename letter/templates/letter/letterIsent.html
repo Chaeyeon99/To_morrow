@@ -18,6 +18,7 @@
         <td>{{letter.senderId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{letter.content}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{letter.sendDate | date:"Y.m.d H:i "}}</td>
+        <td onclick="location.href='/letter/delsend/{{letter.letterId}}/'">쓰레기통</td>
     </tr>
 {% endfor %}
 </table>

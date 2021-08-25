@@ -5,7 +5,7 @@ from accounts.models import Member
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from .validation import validate_phone
+from .validation import validate_phone, validate_password
 
 
 
@@ -14,7 +14,7 @@ class DateInput(forms.DateInput):
 
 # 회원 가입 폼 
 class UserCreationForm(forms.ModelForm):
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput, validators=[validate_password])
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
     job_Choices=(('education', '교육자'), ('student', '학생'), ('business', '자영업자'), ('medical', '의료직')
     , ('artist', '예술인'), ('sports', '운동인'), ('office', '직장인'), ('finance', '금융'), ('IT', 'IT')

@@ -18,6 +18,7 @@ recvLetter_result
         <td>{{frmOthers.senderId}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{frmOthers.content}}&nbsp;&nbsp;&nbsp;</td>
         <td>{{frmOthers.sendDate | date:"Y.m.d H:i "}}</td>
+        <td onclick="location.href='/letter/delreceive/{{frmOthers.letterId}}/'">쓰레기통</td>
     </tr>
 {% endfor %}
 </table>
