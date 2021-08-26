@@ -62,7 +62,8 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = get_user_model()
         fields = ['memberId', 'name','birth','job', 'nickname','phone', 'email']
-
+        exclude = ['password']
+        
     #폼 설정 : read only
     def __init__(self, *args, **kwargs):
         super(CustomUserChangeForm, self).__init__(*args, **kwargs)
