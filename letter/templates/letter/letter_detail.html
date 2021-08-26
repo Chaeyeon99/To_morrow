@@ -1,32 +1,52 @@
-<h2>letter_detail</h2>
-
-<Table>
-    <tr>
-        <td>letter_id</td>
-        <td>{{letter.letterId}}</td>
-    </tr>
-    <tr>
-        <td>sender</td>
-        <td>{{letter.senderId}}</td>
-    </tr>
-    <tr>
-        <td>receivedate</td>
-        <td>{{letter.receiveDate | date:"Y.m.d H:i "}}</td>
-    </tr>
-    <tr>
-        <td>content</td>
-        <td>{{letter.content}}</td>
-    </tr>
-    <tr>
-        <td>emotion</td>
-        <td>{{letter.emotion}}</td>
-    </tr>
-</Table>
-<input type="button" value="목록으로" onclick="back()">
-
-<script>
-    const back = () => {
-        window.history.back();
-        location.href = document.referrer;
-    }
-</script>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>To, morrow for you</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="d-block">
+            {% include "letter/navbar.html" %}
+        </div>
+    <div class="container vh-100 d-flex align-items-center col justify-content-center">
+    <div class="card bg-light mb-3" style="width: 70%;height:80%">
+        <div class="card-header">
+            <h4 class="card-title">To. morrow</h4>
+            {% if letter.emotion >= 62 and letter.emotion <= 100 %}
+            <div class="progress">
+                <div class="progress-bar bg-success" role="progressbar" style="width:{{letter.emotion}}%;" aria-valuenow="{{ letter.emotion }}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            {% elif letter.emotion >= 37 and letter.emotion < 62 %}
+            <div class="progress">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: {{letter.emotion}}%;" aria-valuenow="{{letter.emotion}}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            {% elif letter.emotion >= 0 and letter.emotion < 37 %}
+            <div class="progress">
+                <div class="progress-bar bg-danger" role="progressbar" style="width: {{ letter.emotion }}%;" aria-valuenow="{{ letter.emotion }}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            {%else%}
+                <span class="badge rounded-pill bg-dark">Error!</span>
+            {% endif %}
+        </div>
+        <div class="card-body" style="overflow-y:auto;">
+            <p class="card-text">{{letter.content}}</p>
+        </div>
+        <div class="card-footer" align="right">
+            <p class="card-text">From {{letter.senderId}}</p>
+            <p class="card-text">{{letter.receiveDate | date:"Y.m.d H:i "}}</p>
+        </div>
+    </div>
+    </div>
+    <input type="button" value="목록으로" onclick="back()">
+    <script>
+        const back = () => {
+            window.history.back();
+            location.href = document.referrer;
+        }
+    </script>
+    </body>
+</head>
+</html>

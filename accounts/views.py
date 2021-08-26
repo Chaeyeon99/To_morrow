@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 
-from .forms import UserCreationForm, CustomUserChangeForm
+from .forms import UserCreationForm, CustomUserChangeForm, LoginForm
 from .models import Member
 
 
@@ -37,7 +37,8 @@ def login_view(request):
         return HttpResponseRedirect('/accounts/Index')
 
     if request.method == 'POST':
-        form = AuthenticationForm(request=request, data=request.POST)
+        # form = AuthenticationForm(request=request, data=request.POST)
+        form = LoginForm(request=request, data=request.POST)
 
         if form.is_valid():
             login_memberId = form.cleaned_data['username']
@@ -54,7 +55,7 @@ def login_view(request):
                 print('비밀번호를 틀렸습니다.')
     
     if request.method == 'GET':
-        form = AuthenticationForm()
+        form = LoginForm()
     
     return render(request, 'accounts/login.html', {'form': form})
 

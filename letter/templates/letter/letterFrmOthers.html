@@ -1,34 +1,65 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-<body>
-<h2>receive letter FROM Others</h2>
+<html lang="en">
+    <head></head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
+        {% if messages %}
+        {% for message in messages %}
+            <script>
+                alert('{{ message }}');
+            </script>
+        {% endfor %}
+        {% endif %}
+    </head>
 
+    <body>
+        <div class="d-block">
+            {% include "letter/navbar.html" %}
+        </div>
+        <div class="container-md vh-100 d-flex align-items-center col justify-content-center">
+            <div class="col-auto">
+           
+                <h2>FromOthers</h2>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Idx(Me)</td>
+                            <th scope="col">emotion</td>
+                            <th scope="col">Sender</td>
+                            <th scope="col">Contents</td>
+                            <th scope="col">SendDate</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for frmOthers in result %}
+                        <tr>
+                            <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{forloop.counter}}&nbsp;&nbsp;&nbsp;</td>
+                            <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">
+                                {% if frmOthers.emotion >= 62 and frmOthers.emotion <= 100  %}
+                                    <object data="{% static 'assets/smile.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
+                                {% elif frmOthers.emotion >= 37 and frmOthers.emotion < 62 %} 
+                                    <object data="{% static 'assets/thinking.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
+                                {% elif frmOthers.emotion > 0 and frmOthers.emotion < 37 %}
+                                    <object data="{% static 'assets/angry.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
+                                {% else %}
+                                    에러
+                                {% endif %}
+                            </td>
+                            <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{frmOthers.senderId}}&nbsp;&nbsp;&nbsp;</td>
+                            <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{frmOthers.content}}&nbsp;&nbsp;&nbsp;</td>
+                            <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{frmOthers.sendDate | date:"Y.m.d H:i "}}</td>
+                            <td onClick="location.href='/letter/delreceive/{{toMe.letterId}}/'"">
+                                <object data="{% static 'assets/trash.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
+                            </td>
+                        </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
 
-<table>
-<tr>
-    <td>Idx</td>
-    <td>Sender</td>
-    <td>Contents&nbsp;&nbsp;&nbsp;</td>
-    <td>SendDate</td>
-</tr>
-{% if messages %}
-{% for message in messages %}
-    <script>
-        alert('{{ message }}');
-    </script>
-{% endfor %}
-{% endif %}
-recvLetter_result
-{% for frmOthers in result %}
-    <tr>
-        <td onclick="location.href='/letter/receive/detail/{{ frmOthers.letterId }}'">{{frmOthers.letterId}}&nbsp;&nbsp;&nbsp;</td>
-        <td onclick="location.href='/letter/receive/detail/{{ frmOthers.letterId }}'">{{frmOthers.senderId}}&nbsp;&nbsp;&nbsp;</td>
-        <td onclick="location.href='/letter/receive/detail/{{ frmOthers.letterId }}'">{{frmOthers.content}}&nbsp;&nbsp;&nbsp;</td>
-        <td onclick="location.href='/letter/receive/detail/{{ frmOthers.letterId }}'">{{frmOthers.sendDate | date:"Y.m.d H:i "}}</td>
-        <td onclick="location.href='/letter/delreceive/{{frmOthers.letterId}}/'">쓰레기통</td>
-    </tr>
-{% endfor %}
-</table>
-<a href="{% url 'accounts:Index' %}"><button>메인화면</button>
-</body>
-</html>
+            <a href="{% url 'accounts:Index' %}"><button>메인화면</button>
+            </div>
+        </div>
+    
+    </body>
+    </html>

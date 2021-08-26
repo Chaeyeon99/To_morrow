@@ -55,11 +55,11 @@ class WriteFormOthers(forms.ModelForm): # WriteForm_toOthers -> WriteFormOthers
     , ('soldier', '군인'), ('etc', '기타'))
 
     content = forms.CharField(widget=forms.Textarea)
-    receiverGroup = forms.MultipleChoiceField(
-        required = True,
-        widget = forms.CheckboxSelectMultiple,
-        choices = job_Choices,
-    )
+    receiverGroup=forms.ChoiceField(
+        widget=forms.Select(attrs={'class':'form-control'}),
+        choices=job_Choices
+        )
+
     receiveDate = forms.DateTimeField(widget=DateInput())
     receiveTime = forms.TimeField(widget=TimeInput())
 

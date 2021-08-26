@@ -1,57 +1,75 @@
-{% if member %}
+{% include "letter/navbar.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>To, morrow 쓰기</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
+</head>
+<body>
+    {% if member %}
 
 
-{% if messages %}
-	{% for message in messages %}
-        <script>
-            alert('{{ message }}');
-        </script>
-	{% endfor %}
-{% endif %}
+    {% if messages %}
+        {% for message in messages %}
+            <script>
+                alert('{{ message }}');
+            </script>
+        {% endfor %}
+    {% endif %}
+
+    <div class="container mt-lg-4">
+        <div class="mx-auto text-center mb-4">
+            <h2> {{member.memberId}}님의 my page</h2>
+        </div>
+        <table class="table w-50 text-center mx-auto"  >
+            <tr>
+                <td><b>아이디</b> </td>
+                <td>{{member.memberId}}</td>
+            </tr>
+            <tr>
+                <td><b>이름</b> </td>
+                <td>{{member.name}}</td>
+            </tr>
+            <tr>
+                <td><b>생년월일</b>  </td>
+                <td>{{member.birth}}</td>
+            </tr>
+            <tr>
+                <td><b>닉네임</b> </td>
+                <td>{{member.nickname}}</td>
+            </tr>
+            <tr>
+                <td><b>직업</b>  </td>
+                <td>{{member.job}}</td>
+            </tr>
+            <tr>
+                <td> <b>전화번호</b>   </td>
+                <td>{{member.phone}}</td>
+            </tr>
+            <tr>
+                <td> <b>이메일</b>   </td>
+                <td>{{member.email}}</td>
+            </tr>
+            <tr>
+            {% if user.is_admin == 1 %}
+            <td> <b>권한</b> </td>
+            <td> 관리자 입니다</td>
+            {% else %}
+            <td> <b>권한</b> </td>
+            <td> 일반 유저 입니다. </td>
+            {% endif %} 
+            </tr>
+        </table>
+        <div class="mx-auto text-center">
+            <button class="btn btn-outline-primary" onclick="location.href='/accounts/update'">회원 정보 수정</button>
+            <button class="btn btn-outline-primary" onclick="location.href='/accounts/password'">비밀번호 변경</button>
+            <button class="btn btn-outline-primary" onclick="location.href='/accounts'">메인화면</button>
+        </div>
+    </div>
 
 
-<h1> USER : {{member.memberId}}</h1>
+    {% endif %}
 
-<h2>사용자 정보</h2>
-    <table style= "border-collapse:separate ; border:2px gray solid" >
-        <tr>
-            <td>아이디 </td>
-            <td>{{member.memberId}}</td>
-        </tr>
-        <tr>
-            <td>이름 </td>
-            <td>{{member.name}}</td>
-        </tr>
-        <tr>
-            <td>생년월일  </td>
-            <td>{{member.birth}}</td>
-        </tr>
-        <tr>
-            <td>닉네임 </td>
-            <td>{{member.nickname}}</td>
-        </tr>
-        <tr>
-            <td>직업  </td>
-            <td>{{member.job}}</td>
-        </tr>
-        <tr>
-            <td> 전화번호   </td>
-            <td>{{member.phone}}</td>
-        </tr>
-        <tr>
-            <td> 이메일   </td>
-            <td>{{member.email}}</td>
-        </tr>
-        <tr>
-        {% if user.is_admin == 1 %}
-        <td> 관리자 입니다</td>
-        {% else %}
-        <td> 일반 유저 입니다.</td>
-        {% endif %} 
-        </tr>
-    </table>
-
-    <button onclick="location.href='/accounts/update'">회원 정보 수정</button>
-    <button onclick="location.href='/accounts/password'">비밀번호 변경</button>
-    <button onclick="location.href='/accounts'">메인화면</button>
-{% endif %}
+</body>
+</html>

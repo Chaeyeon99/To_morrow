@@ -1,33 +1,64 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-<body>
-<h2>receive letter To Me</h2>
-<h3>To, morrow mesage for {{ nickname }} </h3>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">  <link rel="stylesheet" href=https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/journal/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
+        {% if messages %}
+        {% for message in messages %}
+            <script>
+                alert('{{ message }}');
+            </script>
+        {% endfor %}
+        {% endif %}
+    </head>
 
-<table>
-<tr>
-    <td>Idx</td>
-    <td>Sender</td>
-    <td>Contents&nbsp;&nbsp;&nbsp;</td>
-    <td>SendDate</td>
-</tr>
-{% if messages %}
-{% for message in messages %}
-    <script>
-        alert('{{ message }}');
-    </script>
-{% endfor %}
-{% endif %}
-{% for toMe in result %}
-    <tr>
-        <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{toMe.letterId}}&nbsp;&nbsp;&nbsp;</td>
-        <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{toMe.senderId}}&nbsp;&nbsp;&nbsp;</td>
-        <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{toMe.content}}&nbsp;&nbsp;&nbsp;</td>
-        <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{toMe.sendDate | date:"Y.m.d H:i "}}</td>
-        <td onClick="location.href='/letter/delreceive/{{toMe.letterId}}/'">쓰레기통</td>
-    </tr>
-{% endfor %}
-</table>
-<a href="{% url 'accounts:Index' %}"><button>메인화면</button>
+    <body>
+        <div class="d-block">
+            {% include "letter/navbar.html" %}
+        </div>
+        <div class="container-md vh-100 d-flex align-items-center col justify-content-center" >
+            <div class="col-auto" >
+                
+                <h2>FromMe</h2>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                        <th scope="col">Idx(Me)</th>
+                        <th scope="col">emotion</th>
+                        <th scope="col">Sender</th>
+                        <th scope="col">Contents</th>
+                        <th scope="col">SendDate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for toMe in result %}
+                    <tr>
+                        <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{forloop.counter}}&nbsp;&nbsp;&nbsp;</td>
+                        <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">
+                            {% if toMe.emotion >= 62 and toMe.emotion <= 100  %}
+                                <object data="{% static 'assets/smile.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
+                            {% elif toMe.emotion >= 37 and toMe.emotion < 62 %} 
+                                <object data="{% static 'assets/thinking.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
+                            {% elif toMe.emotion > 0 and toMe.emotion < 37 %}
+                                <object data="{% static 'assets/angry.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
+                            {% else %}
+                                에러
+                            {% endif %}
+                        </td>
+                        <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{toMe.senderId}}&nbsp;&nbsp;&nbsp;</td>
+                        <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{toMe.content}}&nbsp;&nbsp;&nbsp;</td>
+                        <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{toMe.sendDate | date:"Y.m.d H:i "}}</td>
+                        <td onClick="location.href='/letter/delreceive/{{toMe.letterId}}/'"">
+                            <object data="{% static 'assets/trash.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
+                        </td>
+                    </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+   
+            <a href="{% url 'accounts:Index' %}"><button>메인화면</button>
+        </div>
+    </div>
 </body>
 </html>

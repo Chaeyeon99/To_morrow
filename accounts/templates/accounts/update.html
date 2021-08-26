@@ -1,18 +1,30 @@
 
-<h1>User Edit</h1>
+{% include "letter/navbar.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>To, morrow</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
+</head>
+<body>
+    <h1>User Edit</h1>
 
-{% if messages %}
-	{% for message in messages %}
-        <script>
-            alert('{{ message }}');
-        </script>
-	{% endfor %}
-{% endif %}
-
-
-<form method="POST">
-    {% csrf_token %}
+    {% if messages %}
+        {% for message in messages %}
+            <script>
+                alert('{{ message }}');
+            </script>
+        {% endfor %}
+    {% endif %}
     
-    {{ update_form.as_p }}
-    <input type="submit" value="Submit"/>
-</form>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        {{ update_form.as_p }}
+        <input type="submit" value="Submit"/>
+    </form>
+
+</body>
+</html>

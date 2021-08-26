@@ -1,19 +1,44 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-<body>
-    {% if messages %}
-	{% for message in messages %}
-        <script>
-            alert('{{ message }}');
-        </script>
-	{% endfor %}
-    {% endif %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>To, morrow 쓰기</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
+        {% if messages %}
+	    {% for message in messages %}
+            <script>
+                alert('{{ message }}');
+            </script>
+	    {% endfor %}
+        {% endif %}
+    </head>
+    <body>
+        <div class="d-block">
+            {% include "letter/navbar.html" %}
+        </div>
+    
     <form action="{% url 'letter:writeToMe' %}" method="post">
         {% csrf_token %}
-        {{ write_form.as_p }}
-        <input type="submit" value="OK">
+        <div class="container vh-100 d-flex align-items-center col justify-content-center" >
+            <div class="row align-items-center" style="width: 70%;height:80%">
+                <div class="col-12 mx-auto">
+                    <h1>To, morrow To, You</h1>
+                    <div class="form-group">
+                    <label for="Content" class="form-label mt-4">내일의 당신에게 하고싶은 말</label>
+                    <textarea class="form-control" id="exampleTextarea" rows="10" value={{ write_form.content }}></textarea>
+                    </div>
+                    <div class="form-group">
+                    미래의 {{write_form.receiveDate}} 이 날,
+                    미래의 {{write_form.receiveTime}} 이 시간에 봐요.
+                    </div>
+        <center><br><br>
+        <button type="submit" class="btn btn-primary">미래의 나에게</button>
+        </center>
+        </div>
+        </div>
+        <div>
     </form>
 
 </body>
 </html>
-

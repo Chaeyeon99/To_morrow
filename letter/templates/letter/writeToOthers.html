@@ -1,21 +1,53 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-<body>
-    {% if messages %}
-	{% for message in messages %}
-        <script>
-            alert('{{ message }}');
-        </script>
-	{% endfor %}
-    {% endif %}
-
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>To, morrow 쓰기</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
+        {% if messages %}
+	    {% for message in messages %}
+            <script>
+                alert('{{ message }}');
+            </script>
+	    {% endfor %}
+        {% endif %}
+    </head>
+    <body>
+        <div class="d-block">
+            {% include "letter/navbar.html" %}
+        </div>
     <form action="{% url 'letter:writeToOthers' %}" method="post">
         {% csrf_token %}
-        {{ write_form.as_p }}
-        <label><input type="radio" name="way_to_send" value="one" checked>그룹 내 1명 만</label>
-        <label><input type="radio" name="way_to_send" value="all">그룹 내 모든 사용자 </label><br>
-        <input type="submit" value="OK">
+        <div class="container vh-100 d-flex align-items-center col justify-content-center" >
+            <div class="row align-items-center" style="width: 70%;height:80%">
+                <div class="col-12 mx-auto">
+                    <h1>To, morrow To, Others</h1>
+                    <div class="form-group">
+                        <label for="Content" class="form-label mt-4">내일의 누군가에게 하고싶은 말</label>
+                        <textarea class="form-control" id="exampleTextarea" rows="10" value={{ write_form.content }}></textarea>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="way_to_send" id="optionsRadios1" value="one" checked>그룹 내 1명
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="way_to_send" id="optionsRadios2" value="all">그룹 내 모든 사용자
+                        </label>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        미래의 {{write_form.receiveDate}} 이 날,
+                        미래의 {{write_form.receiveTime}} 이 시간에 전송됩니다.
+                    </div>
+                <br><center><br><br>
+                <button type="submit" class="btn btn-primary">미래의 누군가에게</button>
+                </center>
+                </div>
+            </div>
+        <div>
     </form>
 </body>
 </html>
-

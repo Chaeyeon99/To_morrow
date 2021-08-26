@@ -1,7 +1,33 @@
-<form method="POST">  
-    {% csrf_token %}
-    {{ form.as_table }}
-    <input type="submit" value="로그인"><br>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko"> 
+<head> 
+    <meta charset="utf-8" />
+    <!-- <link href="{% static 'css/test.css' %}" rel="stylesheet" /> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
+
+</head> 
+<body>
     
-</form>
-<a href="{% url 'accounts:Index' %}"><button>메인화면</button> </a>
+    
+    <form method="POST">  
+        {% csrf_token %}
+        <div class="container vh-100 d-flex align-items-center col justify-content-center">
+            <div class="row align-items-center">
+                <div class="col-12 mx-auto">
+                    <h1>To, morrow</h1>
+                    <div class="justify-content-center">
+                        {{ form.as_table }}
+                        <br>
+                        <button type="submit" class="btn btn-primary mx-auto d-block">로그인</button>
+                        <br>
+                        <div class="col-7 mx-auto">
+                            <a href="{% url 'accounts:Index' %}" class="btn btn-primary mx-auto d-block">메인화면</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      
+    </form>

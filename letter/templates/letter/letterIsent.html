@@ -1,38 +1,54 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-<body>
-<h2>내가 보낸 편지 목록</h2>
+<html lang="en">
+    <head> 
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">  <link rel="stylesheet" href=https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/journal/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
+        
+        {% if messages %}
+        {% for message in messages %}
+            <script>
+                alert('{{ message }}');
+            </script>
+        {% endfor %}
+        {% endif %}
+    </head>
 
+    <body>
+        <div class="d-block">
+            {% include "letter/navbar.html" %}
+        </div>
 
-<table>
-<tr>
-    <td>Idx</td>
-    <td>Sender</td>
-    <td>Contents&nbsp;&nbsp;&nbsp;</td>
-    <td>SendDate</td>
-</tr>
-
-{% if messages %}
-{% for message in messages %}
-    <script>
-        alert('{{ message }}');
-    </script>
-{% endfor %}
-{% endif %}
-
-{% for letter in letters %}
-    <tr>
-
-    <div onclick="location.href='/letter/send/detail/{{ letter.letterId }}/'">
-        <td>{{letter.letterId}}&nbsp;&nbsp;&nbsp;</td>
-        <td>{{letter.senderId}}&nbsp;&nbsp;&nbsp;</td>
-        <td>{{letter.content}}&nbsp;&nbsp;&nbsp;</td>
-        <td>{{letter.sendDate | date:"Y.m.d H:i "}}</td>
+        <div class="container-md">
+            <div class="col-auto" style="overflow-y: auto; height: 70%; ">
+                <h2>Letter I sent</h2>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                        <th scope="col">Idx</th>
+                        <th scope="col">Sender</th>
+                        <th scope="col">Contents&nbsp;&nbsp;&nbsp;</th>
+                        <th scope="col">SendDate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for letter in letters %}
+                    <tr>
+                        <td onClick="location.href='/letter/send/detail/{{ letter.letterId }}/'">{{letter.letterId}}</td>
+                        <td onClick="location.href='/letter/send/detail/{{ letter.letterId }}/'">{{letter.senderId}}</td>
+                        <td onClick="location.href='/letter/send/detail/{{ letter.letterId }}/'">{{letter.content}}</td>
+                        <td onClick="location.href='/letter/send/detail/{{ letter.letterId }}/'">{{letter.sendDate | date:"Y.m.d H:i "}}</td>
+                        <td onClick="location.href='/letter/delreceive/{{toMe.letterId}}/'"">
+                            <object data="{% static 'assets/trash.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
+                        </td>
+                    </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+   
+            <a href="{% url 'accounts:Index' %}"><button>메인화면</button>
+        </div>
     </div>
-        <td onclick="location.href='/letter/delsend/{{letter.letterId}}/'">쓰레기통</td>
-    </tr>
-{% endfor %}
-</table>
-<a href="{% url 'accounts:Index' %}"><button>메인화면</button>
+
 </body>
 </html>

@@ -12,9 +12,13 @@ from django.contrib.messages import constants as messages_constants
 from django.contrib import messages
 from random import *
 from datetime import datetime
-#from google.cloud import language_v1
-#client = language_v1.LanguageServiceClient.from_service_account_json(r'C:\Users\samsung\Desktop\django_study\service_account.json')
+# from google.cloud import language_v1
+# client = language_v1.LanguageServiceClient.from_service_account_json(r'C:\Users\samsung\Desktop\django_study\service_account.json')
 
+def test(request,):
+
+
+    return render(request, 'letter/test.html') 
 
 def writeToMe(request):
     if not request.session.get('user'): 
@@ -36,7 +40,7 @@ def writeToMe(request):
 
             # document = language_v1.Document(content=write_form.content, type_=language_v1.Document.Type.PLAIN_TEXT)
             # sentiment_doc = client.analyze_sentiment(request={'document': document}).document_sentiment
-            # emotionScore = int(sentiment_doc.score * 100)
+            # emotionScore = int((sentiment_doc.score * 100 + 100) / 2)
             
             emotionScore=50
 
@@ -44,7 +48,7 @@ def writeToMe(request):
                 senderId = now_member,
                 content=write_form.content,
                 receiveDate=write_form.receiveDate,
-                emotion=1,
+                emotion=emotionScore,
             )
 
             letter.save()
@@ -94,10 +98,10 @@ def writeToOthers(request):
             is_user_exist = False
 
             all_members = Member.objects.all()
-      
-            for group in write_form.receiverGroup:
-                if all_members.filter(job=group).exclude(memberId=memberId).count() != 0:
-                    is_user_exist = True   
+            group=write_form.receiverGroup
+            if all_members.filter(job=group).exclude(memberId=memberId).count() != 0:
+                is_user_exist = True   
+
 
             if is_user_exist == False: 
                 messages.error(request, '해당 그룹에 속한 사용자가 없어, 전송이 취소되었습니다.')            
@@ -125,28 +129,25 @@ def writeToOthers(request):
 
              
                 if way_to_send == 'all' :  # 그룹 내 모든 사용자에게 보내기 
-                    for group in write_form.receiverGroup:
-                        for receiver in all_members.filter(job=group).exclude(memberId=memberId) : 
-                            receiveLetter = Receiveletter()
-                            receiveLetter.letterId = now_letter
-                            receiveLetter.receiverId = receiver
-                            receiveLetter.readCheck = False
-                            receiveLetter.save()
-                else : # 그룹 내 1명의 사용자에게 보내기 
-                    for group in write_form.receiverGroup:
-                        grpMember_num = all_members.filter(job=group).exclude(memberId=memberId).count()
-                        
-                
-                        if grpMember_num != 0 :
-                            random_idx = randint(0,grpMember_num-1)
-                          
-                            receiver = all_members.filter(job=group).exclude(memberId=memberId)[random_idx]
+                    for receiver in all_members.filter(job=group).exclude(memberId=memberId) : 
+                        receiveLetter = Receiveletter()
+                        receiveLetter.letterId = now_letter
+                        receiveLetter.receiverId = receiver
+                        receiveLetter.readCheck = False
+                        receiveLetter.save()
 
-                            receiveLetter = Receiveletter()
-                            receiveLetter.letterId = now_letter
-                            receiveLetter.receiverId = receiver
-                            receiveLetter.readCheck = False
-                            receiveLetter.save()
+
+                else : # 그룹 내 1명의 사용자에게 보내기 
+
+                    grpMember_num = all_members.filter(job=group).exclude(memberId=memberId).count()
+                    if grpMember_num != 0 :
+                        random_idx = randint(0,grpMember_num-1)
+                        receiver = all_members.filter(job=group).exclude(memberId=memberId)[random_idx]
+                        receiveLetter = Receiveletter()
+                        receiveLetter.letterId = now_letter
+                        receiveLetter.receiverId = receiver
+                        receiveLetter.readCheck = False
+                        receiveLetter.save()
 
 
                 messages.add_message(request, messages.INFO, '전송 성공.')
@@ -168,7 +169,7 @@ def letterFrmMe(request):
     if request.method=='GET':
         try:
             memberId=request.session.get('user')
-            result=[]
+            result = []
 
             #멤버에 해당 로그인 사용자가 존재하는지
             if Member.objects.filter(memberId=memberId).exists():
@@ -192,6 +193,7 @@ def letterFrmMe(request):
                                     letter_obj.content = "(읽지 않음)"
                                     
                                 if recv_date <= now_time :
+                                    letter_obj.content=letter_obj.content[:30]
                                     result.append(letter_obj)
                             
             
@@ -235,6 +237,7 @@ def letterFrmOthers(request):
                                     letter_obj.content = "(읽지 않음)"
                                 #시간비교 조건 넣기
                                 if recv_date <= now_time :
+                                    letter_obj.content=letter_obj.content[:30]
                                     result.append(letter_obj)
                                 
                                
@@ -275,7 +278,7 @@ def letterIsent (request):
     for letter in letters:
         letter_id = letter.letterId
         sendletter_obj = Sendletter.objects.get(letterId=letter_id)
-        if sendletter_obj.is_deleted == False: 
+        if sendletter_obj.is_deleted == False:
             result.append(letter)
 
     return render(request, 'letter/letterIsent.html', {'letters': result })
@@ -341,6 +344,7 @@ def show_delete_list(request, page):
                             letter_ids = send_col.letterId
                             letter_id = letter_ids.letterId
                             letter_obj = Letter.objects.get(letterId = letter_id)
+                            letter_obj.content=letter_obj.content[:30]
                             result.append(letter_obj)
                             
                 if str(page)=='receive':
@@ -351,9 +355,9 @@ def show_delete_list(request, page):
                             letter_ids = receive_col.letterId
                             letter_id = letter_ids.letterId
                             letter_obj = Letter.objects.get(letterId = letter_id)
+                            letter_obj.content=letter_obj.content[:30]
                             result.append(letter_obj)
-
-            return render(request, 'letter/show_delete_list.html', {'result':result, 'nickname' : nickname, 'page':page})                
+               
         except member.DoesNotExist:
             raise Http404("Error!")
     return render(request, 'letter/show_delete_list.html', {'result':result, 'nickname' : nickname, 'page':page})
