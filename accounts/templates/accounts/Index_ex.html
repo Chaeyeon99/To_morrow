@@ -1,0 +1,33 @@
+<h2>Index 페이지 </h2>
+{% if messages %}
+   {% for message in messages %}
+        <script>
+            alert('{{ message }}');
+        </script>
+   {% endfor %}
+{% endif %}
+
+
+{% if user.is_active %} 
+    로그인 상태
+    <p>Welcome, <b>{{ user.name }}. </b>Thanks for logging in.</p>
+<li><a href="{% url 'accounts:logout' %}">  로그아웃 </a></li>
+<li><a href="{% url 'accounts:profile' %}"> 개인페이지 </a></li><br>
+
+<li><a href="{% url 'letter:writeToMe' %}"> 나에게 편지쓰러가기  </a></li>
+<li><a href="{% url 'letter:writeToOthers' %}"> 타인에게 편지쓰러가기  </a></li><br>
+
+<li><a href="{% url 'letter:letterFrmMe' %}"> 나에게 쓴 편지 목록  </a></li>
+<li><a href="{% url 'letter:letterFrmOthers' %}"> 타인에게 받은 편지 목록  </a></li><br>
+
+<li><a href="{% url 'letter:letterIsent' %}"> 내가 보낸 편지 목록  </a></li> <br>
+
+<li><a href="/letter/trash/send"> 내가 보낸 편지 쓰레기통 </a></li>
+<li><a href="/letter/trash/receive"> 내가 받은 편지 쓰레기통  </a></li>
+
+{% else %} 
+    로그아웃 상태
+    <li><a href="{% url 'accounts:signup' %}">  회원가입 </a></li>
+    <li><a href="{% url 'accounts:login' %}">  로그인 </a></li>
+    <li><a href="{% url 'password_reset' %}"> 비밀번호 찾기 </a></li>
+{% endif %}
