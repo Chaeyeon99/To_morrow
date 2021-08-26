@@ -105,10 +105,12 @@ def profile(request):
 def updateProfile(request):
     if request.method == 'POST':
         update_form = CustomUserChangeForm(request.POST, instance=request.user)
+        memberId=request.session.get('user')
+        print("update_form : ", update_form.cleaned_data['memberId'])
         if update_form.is_valid():
-            memberId=request.session.get('user')
+                
             email = update_form.cleaned_data['email']
-                   
+                    
             if Member.objects.filter(memberId=memberId).exists() :
                 member = Member.objects.get(memberId=memberId)
                 member.email = email

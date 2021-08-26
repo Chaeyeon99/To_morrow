@@ -1,21 +1,40 @@
-{% load static %}
+{% include "letter/navbar.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>To, morrow 회원가입</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
+</head>
+<body>
+    {% load static %}
 
-{% block content %}
-    <h2>일반회원용 회원가입</h2>
- 
-    {% if form.errors %}
-    <p style="color:red;">양식에 맞게 작성해주세요.</p>
-    {% endif %}
+    {% block content %}
+        <h3 class="text-center mt-lg-4">회원가입</h3>
+     
+        {% if form.errors %}
+        <p style="color:red;">양식에 맞게 작성해주세요.</p>
+        {% endif %}
+    
+        <form method="post" action="{% url 'accounts:signup' %}">
+        {% csrf_token %} 
+        <div class="container mt-lg-4">
+            <div class="w-25 text-center mx-auto">
+                {{form.as_p}}
+            </div>
+            <div class="justify-content-center">
+                <button type="submit" class="btn btn-primary mx-auto d-block"> 가입하기 </button>
+                <a href="{% url 'accounts:Index' %}"><button class="btn btn-primary mx-auto d-block mt-lg-2">메인화면</button> </a>  
+            </div>
+        </div>
 
-    <form method="post" action="{% url 'accounts:signup' %}">
+    
+        
+        </form>
+    
+    {% endblock %}
+    
+    
 
-    {% csrf_token %} 
-
-
-    {{form.as_p}}
-
-    <button type="submit"> 가입하기 </button>
-    </form>
-
-{% endblock %}
-<a href="{% url 'accounts:Index' %}"><button>메인화면</button> </a>
+</body>
+</html>
