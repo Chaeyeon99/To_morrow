@@ -42,7 +42,6 @@ def get_secret(setting, secrets=secrets):
 
 SECRET_KEY = get_secret("SECRET_KEY")
 
-
 # Email 전송
 # 메일을 호스트하는 서버
 EMAIL_HOST = 'smtp.gmail.com'

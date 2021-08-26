@@ -17,10 +17,10 @@
                     <div class="justify-content-center">
                         {{ form.as_table }}
                         <br>
-                        <button type="submit" class="btn btn-primary mx-auto d-block">로그인</button>
-                        <br>
-                        <div class="col-7 mx-auto">
-                            <a href="{% url 'accounts:Index' %}" class="btn btn-primary mx-auto d-block">메인화면</a>
+                        <button type="submit" class="btn btn-primary mx-auto d-block w-50">로그인</button>
+                        <div class="mx-auto text-center mt-lg-2">
+                            <a href="{% url 'password_reset' %}" class="btn btn-primary"> 비밀번호 찾기 </a>
+                            <a href="{% url 'accounts:Index' %}" class="btn btn-primary">메인화면</a>
                         </div>
                     </div>
                 </div>

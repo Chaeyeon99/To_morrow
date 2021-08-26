@@ -17,7 +17,8 @@ class DateInput(forms.DateInput):
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='비밀번호', widget=forms.PasswordInput(attrs={'class': 'form-control'}), 
     validators=[validate_password])
-    password2 = forms.CharField(label='비밀번호 확인', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password2 = forms.CharField(label='비밀번호 확인', widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+    validators=[validate_password])
     job_Choices=(('education', '교육자'), ('student', '학생'), ('business', '자영업자'), ('medical', '의료직')
     , ('artist', '예술인'), ('sports', '운동인'), ('office', '직장인'), ('finance', '금융'), ('IT', 'IT')
     , ('architect', '건설'), ('public', '공무원'), ('jobseeker', '취준생'), ('housewife', '주부')
@@ -99,16 +100,20 @@ class CustomUserChangeForm(UserChangeForm):
         self.email = str(email)
 
 class PasswordForm(PasswordChangeForm):
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
+
+    old_password = forms.CharField(label='현재 비밀번호', widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    new_password1 = forms.CharField(label='새 비밀번호', widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    new_password2 = forms.CharField(label='새 비밀번호 확인', widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    
     def __init__(self, *args, **kwargs):
-        super(LoginForm, self).__init__(*args, **kwargs)
+        super(PasswordForm, self).__init__(*args, **kwargs)
 
 
 
 
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    username = forms.CharField(label='ID', widget=forms.TextInput(attrs={'class':'form-control'}))
+    password = forms.CharField(label='PW', widget=forms.PasswordInput(attrs={'class':'form-control'}))
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
