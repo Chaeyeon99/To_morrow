@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import TextInput
 from accounts.models import Member
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from .validation import validate_phone, validate_password
@@ -60,6 +60,7 @@ class UserCreationForm(forms.ModelForm):
 
 # 개인 정보 수정
 class CustomUserChangeForm(UserChangeForm):
+    password=None
     job_Choices=(('education', '교육자'), ('student', '학생'), ('business', '자영업자'), ('medical', '의료직')
     , ('artist', '예술인'), ('sports', '운동인'), ('office', '직장인'), ('finance', '금융'), ('IT', 'IT')
     , ('architect', '건설'), ('public', '공무원'), ('jobseeker', '취준생'), ('housewife', '주부')
@@ -96,6 +97,13 @@ class CustomUserChangeForm(UserChangeForm):
         cleaned_data = super().clean()
         email = cleaned_data.get('email', '')
         self.email = str(email)
+
+class PasswordForm(PasswordChangeForm):
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+
+
 
 
 class LoginForm(AuthenticationForm):
