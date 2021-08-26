@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 
-from .forms import UserCreationForm, CustomUserChangeForm, LoginForm
+from .forms import UserCreationForm, CustomUserChangeForm, LoginForm, PasswordForm
 from .models import Member
 
 
@@ -131,7 +131,7 @@ def updateProfile(request):
 # 패스워드 변경 
 def password(request):
     if request.method == "POST":
-        password_change_form = PasswordChangeForm(request.user, request.POST)
+        password_change_form = PasswordForm(request.user, request.POST)
         
         if password_change_form.is_valid():
             user = password_change_form.save()
@@ -142,7 +142,7 @@ def password(request):
             messages.error(request, '비밀번호 실패 다시 시도해주세요')
             return redirect('/accounts/password', request.user.memberId)
     else:
-        password_change_form = PasswordChangeForm(request.user)
+        password_change_form = PasswordForm(request.user)
         context = {
             'password_change_form': password_change_form
         }

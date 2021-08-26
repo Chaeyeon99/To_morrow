@@ -13,7 +13,7 @@
         <h3 class="text-center mt-lg-4">회원가입</h3>
      
         {% if form.errors %}
-        <p style="color:red;">양식에 맞게 작성해주세요.</p>
+        <p class="text-center" style="color:red;">양식에 맞게 작성해주세요.</p>
         {% endif %}
     
         <form method="post" action="{% url 'accounts:signup' %}">
