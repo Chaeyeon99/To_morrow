@@ -1,7 +1,16 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <head></head>
+    <head>
+        <style>
+            @font-face {
+                font-family: 'MapoFlowerIsland';
+                src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoFlowerIslandA.woff') format('woff');
+                font-weight: normal;
+                font-style: normal;
+            }
+            body{ font-family:'MapoFlowerIsland' !important; }
+        </style>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
         {% if messages %}
@@ -12,23 +21,21 @@
         {% endfor %}
         {% endif %}
     </head>
-
     <body>
-        <div class="d-block">
+        <div class="container mb-5">
             {% include "letter/navbar.html" %}
         </div>
-        <div class="container-md vh-100 d-flex align-items-center col justify-content-center">
-            <div class="col-auto">
-           
-                <h2>FromOthers</h2>
+        <div class="container-md">
+            <div class="col-auto" style = "overflow-y:auto; height:70%;">
+                <br><h2>From. Others</h2>
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">Idx(Me)</td>
-                            <th scope="col">emotion</td>
-                            <th scope="col">Sender</td>
-                            <th scope="col">Contents</td>
-                            <th scope="col">SendDate</td>
+                            <th scope="col">Idx(Me)</th>
+                            <th scope="col">emotion</th>
+                            <th scope="col">Sender</th>
+                            <th scope="col">Contents&nbsp;&nbsp;&nbsp;</th>
+                            <th scope="col">SendDate</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,29 +44,30 @@
                             <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{forloop.counter}}&nbsp;&nbsp;&nbsp;</td>
                             <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">
                                 {% if frmOthers.emotion >= 62 and frmOthers.emotion <= 100  %}
-                                    <object data="{% static 'assets/smile.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
+                                <iframe src="{% static 'assets/smile.svg' %}" style="height: 20px; width :20px;" ></iframe>
+                                    <!-- <object data="{% static 'assets/smile.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>            -->
                                 {% elif frmOthers.emotion >= 37 and frmOthers.emotion < 62 %} 
-                                    <object data="{% static 'assets/thinking.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
+                                <iframe src="{% static 'assets/thinking.svg' %}" style="height: 20px; width :20px;" ></iframe>
+                                    <!-- <object data="{% static 'assets/thinking.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>            -->
                                 {% elif frmOthers.emotion > 0 and frmOthers.emotion < 37 %}
-                                    <object data="{% static 'assets/angry.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
+                                <iframe src="{% static 'assets/angry.svg' %}" style="height: 20px; width :20px;" ></iframe>
+                                    <!-- <object data="{% static 'assets/angry.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>            -->
                                 {% else %}
-                                    에러
+                                  에러
                                 {% endif %}
                             </td>
                             <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{frmOthers.senderId}}&nbsp;&nbsp;&nbsp;</td>
                             <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{frmOthers.content}}&nbsp;&nbsp;&nbsp;</td>
                             <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{frmOthers.sendDate | date:"Y.m.d H:i "}}</td>
-                            <td onClick="location.href='/letter/delreceive/{{toMe.letterId}}/'"">
-                                <object data="{% static 'assets/trash.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
+                            <td onClick="location.href='/letter/delreceive/{{toMe.letterId}}/'">
+                                <iframe src="{% static 'assets/trash.svg' %}" style="height: 20px; width :20px;" ></iframe>
+                                <!-- <object data="{% static 'assets/trash.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>            -->
                             </td>
                         </tr>
                             {% endfor %}
                         </tbody>
                     </table>
-
-            <a href="{% url 'accounts:Index' %}"><button>메인화면</button>
             </div>
         </div>
-    
     </body>
-    </html>
+</html>

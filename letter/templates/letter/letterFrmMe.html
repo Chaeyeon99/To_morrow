@@ -2,32 +2,42 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <style>
+            @font-face {
+                font-family: 'MapoFlowerIsland';
+                src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoFlowerIslandA.woff') format('woff');
+                font-weight: normal;
+                font-style: normal;
+            }
+            body{ font-family:'MapoFlowerIsland' !important; }
+        </style>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/journal/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
         {% if messages %}
         {% for message in messages %}
+
             <script>
                 alert('{{ message }}');
             </script>
         {% endfor %}
         {% endif %}
     </head>
-
     <body>
-        <div class="d-block">
-            {% include "letter/navbar.html" %}
-        </div>
-        <div class="container-md vh-100 d-flex align-items-center col justify-content-center" >
-            <div class="col-auto" >
-                
-                <h2>FromMe</h2>
+    <div class="container mb-5">
+        {% include "letter/navbar.html" %}
+    </div>
+            
+
+        <div class="container-md" >
+            <div class="col-auto" style = "overflow-y:auto; height:70%;">
+                <br><h2>From. Me</h2>
                 <table class="table table-hover">
                     <thead>
                         <tr>
                         <th scope="col">Idx(Me)</th>
                         <th scope="col">emotion</th>
                         <th scope="col">Sender</th>
-                        <th scope="col">Contents</th>
+                        <th scope="col">Contents&nbsp;&nbsp;&nbsp;</th>
                         <th scope="col">SendDate</th>
                         </tr>
                     </thead>
@@ -56,9 +66,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-   
-            <a href="{% url 'accounts:Index' %}"><button>메인화면</button>
+            </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>

@@ -50,7 +50,7 @@ def login_view(request):
 
                 login(request, memberId) 
                 request.session['user']=member.memberId
-                return redirect('/accounts')
+                return redirect('/letter/letterFrmMe')
             else:
                 print('비밀번호를 틀렸습니다.')
     

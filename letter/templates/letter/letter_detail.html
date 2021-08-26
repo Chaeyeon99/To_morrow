@@ -2,19 +2,36 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <style>
+            @font-face {
+                font-family: 'MapoFlowerIsland';
+                src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoFlowerIslandA.woff') format('woff');
+                font-weight: normal;
+                font-style: normal;
+            }
+            body{ font-family:'MapoFlowerIsland' !important; }
+        </style>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <title>To, morrow for you</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
     </head>
     <body>
-        <div class="d-block">
+        <div class="container mb-5">
             {% include "letter/navbar.html" %}
         </div>
+        <div class="container mt-lg-5">
+        </div>
+        
+
     <div class="container vh-100 d-flex align-items-center col justify-content-center">
     <div class="card bg-light mb-3" style="width: 70%;height:80%">
         <div class="card-header">
+            
             <h4 class="card-title">To. morrow</h4>
+            <div align="right">
+                <input class="card-title" type="button" value="목록으로" onclick="back() " >
+            </div>
             {% if letter.emotion >= 62 and letter.emotion <= 100 %}
             <div class="progress">
                 <div class="progress-bar bg-success" role="progressbar" style="width:{{letter.emotion}}%;" aria-valuenow="{{ letter.emotion }}" aria-valuemin="0" aria-valuemax="100"></div>
@@ -40,7 +57,7 @@
         </div>
     </div>
     </div>
-    <input type="button" value="목록으로" onclick="back()">
+
     <script>
         const back = () => {
             window.history.back();

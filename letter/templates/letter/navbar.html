@@ -1,16 +1,42 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="position: sticky; top: 0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">  <link rel="stylesheet" href=https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/journal/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="position: fixed; top: 0; left:0; right:0; z-index: 10000;">
+  
     <div class="container-fluid">
-      <div class="collapse navbar-collapse">
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item active">
-              <a class="nav-link" href="{% url 'letter:letterFrmMe' %}">Home</a>
+            <li class="nav-item dropdown" style="margin-right: 30px;">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">Letter</a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" tabindex="-1" href="{% url 'letter:letterFrmMe' %}">From Me</a>
+              <a class="dropdown-item" tabindex="-1" href="{% url 'letter:letterFrmOthers' %}">From Others</a>
+              </div>
+            </li>
+            
+            
+          <li class="nav-item dropdown" style="margin-right: 30px;">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">Write</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" tabindex="-1" href="{% url 'letter:writeToMe' %}">To Me</a>
+              <a class="dropdown-item" tabindex="-1" href="{% url 'letter:writeToOthers' %}">To Others</a>
+            </div>
           </li>
-          <li class="nav-item">
-              <a class="nav-link" href="{% url 'letter:letterFrmOthers' %}">ReadLetter</a>
+
+          <li class="nav-item dropdown" style="margin-right: 30px;">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">Trash</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" tabindex="-1" href="/letter/trash/send/">Send</a>
+              <a class="dropdown-item" tabindex="-1" href="/letter/trash/receive/">Receive</a>
+            </div>
           </li>
-          <li class="nav-item">
-              <a class="nav-link" href="{% url 'letter:writeToMe' %}">WriteLetter</a>
-          </li>
+
+
         </ul>
       </div>
     </div>
