@@ -6,7 +6,7 @@ class LetterAdmin(admin.ModelAdmin):
     list_filter = ('emotion', )
 
     fieldsets = (
-        ('Letter info', {'fields': ('content', 'emotion')}),
+        ('Letter', {'fields': ('content', 'emotion')}),
         ('Letter info', {'fields': ('receiveDate',)}),
     )
     exclude = ('sendDate',)
@@ -18,31 +18,28 @@ admin.site.register(Letter,LetterAdmin)
 
 
 class ReceiveletterAdmin(admin.ModelAdmin):
-    list_display = ('letterId', 'content', 'receiverId', 'sendDate' )
-    list_filter = ('emotion', )
+    list_display = ('letterId', 'receiverId', 'is_deleted', 'readCheck' )
+    list_filter = ('is_deleted', 'readCheck' )
 
     fieldsets = (
-        ('Letter info', {'fields': ('content', 'emotion')}),
-        ('Letter info', {'fields': ('receiveDate',)}),
+        ('Letter info', {'fields': ('receiverId',)}),
+        ('Letter status', {'fields': ('is_deleted', 'readCheck')}),
     )
-    exclude = ('sendDate',)
-    search_fields = ('content',)
-    ordering = ('sendDate',)
+    ordering = ('receiveCol',)
 
 
 admin.site.register(Receiveletter,ReceiveletterAdmin)
 
+
 class SendletterAdmin(admin.ModelAdmin):
-    list_display = ('letterId', 'content', 'senderId', 'sendDate' )
-    list_filter = ('emotion', )
+    list_display = ('letterId', 'senderId', 'is_deleted' )
+    list_filter = ('is_deleted', )
 
     fieldsets = (
-        ('Letter info', {'fields': ('content', 'emotion')}),
-        ('Letter info', {'fields': ('receiveDate',)}),
+        ('Letter info', {'fields': ('letterId', 'senderId')}),
+        ('Letter status', {'fields': ('is_deleted',)}),
     )
-    exclude = ('sendDate',)
-    search_fields = ('content',)
-    ordering = ('sendDate',)
+    ordering = ('sendCol',)
 
 
 admin.site.register(Sendletter,SendletterAdmin)
