@@ -8,8 +8,6 @@
 </head>
 <body>
     {% if member %}
-
-
     {% if messages %}
         {% for message in messages %}
             <script>
@@ -18,11 +16,11 @@
         {% endfor %}
     {% endif %}
 
-    <div class="container mt-lg-4">
-        <div class="mx-auto text-center mb-4">
-            <h2> {{member.memberId}}님의 my page</h2>
-        </div>
-        <table class="table w-50 text-center mx-auto"  >
+    <div class="container mt-lg-5">
+        <div class="mx-auto text-center mb-4"><br><br>
+            <h2> {{member.nickname}}님의 my page</h2>
+        </div><br><br>
+        <table class="table w-50 text-center mx-auto" >
             <tr>
                 <td><b>아이디</b> </td>
                 <td>{{member.memberId}}</td>
@@ -61,7 +59,7 @@
             {% endif %} 
             </tr>
         </table>
-        <div class="mx-auto text-center">
+        <div class="mx-auto text-center"><br>
             <button class="btn btn-outline-primary" onclick="location.href='/accounts/update'">회원 정보 수정</button>
             <button class="btn btn-outline-primary" onclick="location.href='/accounts/password'">비밀번호 변경</button>
             <button class="btn btn-outline-primary" onclick="location.href='/accounts'">메인화면</button>

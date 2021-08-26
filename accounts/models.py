@@ -41,6 +41,7 @@ class MemberManager(BaseUserManager):
             email=self.normalize_email(email),
         )
 
+        user.set_password(password)
         user.is_admin = True
         user.save(using=self._db)
         return user

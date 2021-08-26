@@ -21,7 +21,8 @@ class Letter(models.Model):
         self.sendDate=timezone.now() #발신 시간
         self.save()
 
-
+    def __str__(self):
+        return str(self.letterId)
 
 class Receiveletter(models.Model):
     class Meta:
