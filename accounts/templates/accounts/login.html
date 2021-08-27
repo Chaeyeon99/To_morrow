@@ -27,10 +27,10 @@
                     <div class="justify-content-center">
                         {{ form.as_table }}
                         <br>
-                        <button type="submit" class="btn btn-primary mx-auto d-block w-50">로그인</button>
+                        <button type="submit" class="btn btn-primary mx-auto d-block w-50 mb-3">로그인</button>
                         <div class="mx-auto text-center mt-lg-2">
-                            <a href="{% url 'password_reset' %}" class="btn btn-primary"> 비밀번호 찾기 </a>
-                            <a href="{% url 'accounts:Index' %}" class="btn btn-primary">메인화면</a>
+                            <a href="{% url 'password_reset' %}" class="btn btn-primary me-1"> 비밀번호 찾기 </a>
+                            <a href="{% url 'accounts:Index' %}" class="btn btn-primary ms-1">메인화면</a>
                         </div>
                     </div>
                 </div>

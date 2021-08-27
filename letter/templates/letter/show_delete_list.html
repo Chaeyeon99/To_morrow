@@ -44,13 +44,10 @@
                             <td onClick="location.href='/letter/receive/detail/{{ col.letterId }}/'">{{col.letterId}}&nbsp;&nbsp;&nbsp;</td>
                             <td onClick="location.href='/letter/receive/detail/{{ col.letterId }}/'">
                                 {% if col.emotion >= 62 and col.emotion <= 100  %}
-                            
-                                <object data="{% static 'assets/smile.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
+                                    <object data="{% static 'assets/smile.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
                                 {% elif col.emotion >= 37 and col.emotion < 62 %}
-                                
                                     <object data="{% static 'assets/middle.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
                                 {% elif col.emotion > 0 and col.emotion < 37 %}
-                                
                                     <object data="{% static 'assets/thinking.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
                                 {% else %}
                                     에러
@@ -60,9 +57,6 @@
                             <td onClick="location.href='/letter/receive/detail/{{ col.letterId }}/'">{{col.senderId}}&nbsp;&nbsp;&nbsp;</td>
                             <td onClick="location.href='/letter/receive/detail/{{ col.letterId }}/'">{{col.content}}&nbsp;&nbsp;&nbsp;</td>
                             <td onClick="location.href='/letter/receive/detail/{{ coll.letterId }}/'">{{col.sendDate | date:"Y.m.d H:i "}}</td>
-                            <td onClick="location.href='/letter/delreceive/{{col.letterId}}/'">
-                                <object data="{% static 'assets/trash.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>           
-                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

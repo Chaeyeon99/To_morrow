@@ -21,7 +21,7 @@
     {% load static %}
 
     {% block content %}
-        <h3 class="text-center mt-lg-4">회원가입</h3>
+        <h3 class="text-center py-5">회원가입</h3>
      
         {% if form.errors %}
         <p class="text-center" style="color:red;">양식에 맞게 작성해주세요.</p>
@@ -33,7 +33,7 @@
             <div class="w-25 text-center mx-auto">
                 {{form.as_p}}
             </div>
-            <div class="justify-content-center">
+            <div class="justify-content-center pb-4">
                 <button type="submit" class="btn btn-primary mx-auto d-block"> 가입하기 </button>
                 <a href="{% url 'accounts:Index' %}"><button class="btn btn-primary mx-auto d-block mt-lg-2">메인화면</button> </a>  
             </div>

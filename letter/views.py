@@ -15,17 +15,15 @@ from datetime import datetime
 # from google.cloud import language_v1
 # client = language_v1.LanguageServiceClient.from_service_account_json(r'C:\Users\samsung\Desktop\django_study\service_account.json')
 
-def test(request,):
-
-
-    return render(request, 'letter/test.html') 
-
+@login_required
 def writeToMe(request):
     if not request.session.get('user'): 
         return redirect('/accounts/login')
     
     if request.method == 'POST':
+       
         memberId = request.session.get('user')
+       
         now_member = Member.objects.get(memberId=memberId)
 
         write_form = WriteForm(request.POST)
@@ -68,14 +66,13 @@ def writeToMe(request):
             receiveLetter.save()
 
             messages.add_message(request, messages.INFO, '전송 성공.')
-            return  redirect('/accounts', request.user.memberId)
+            return  redirect('/letter/letterFrmMe', request.user.memberId)
     else:
         write_form = WriteForm()
         context = {'write_form': write_form}
     return render(request, 'letter/writeToMe.html', context)
 
-
-# 타인에게 편지 쓰기 
+@login_required
 def writeToOthers(request):
     if not request.session.get('user'): 
         return redirect('/accounts/login')
@@ -86,15 +83,14 @@ def writeToOthers(request):
 
         write_form = WriteFormOthers(request.POST)
 
-    
         if write_form.is_valid():
             receive_date=write_form.receiveDate
 
             if receive_date < datetime.now():
-                messages.add_message(request, messages.INFO, '받는 날짜를 현재 시간 이후로 설정해주세요.')
+                messages.error(request, messages.INFO, '받는 날짜를 현재 시간 이후로 설정해주세요.')
                 context = {'write_form': write_form}
                 return render(request, 'letter/writeToOthers.html', context)
-            # 선택한 그룹에 속한 사용자가 0명이라, 편지를 보내지 않는 경우 
+          
             is_user_exist = False
 
             all_members = Member.objects.all()
@@ -106,8 +102,8 @@ def writeToOthers(request):
             if is_user_exist == False: 
                 messages.error(request, '해당 그룹에 속한 사용자가 없어, 전송이 취소되었습니다.')            
                 return render(request, 'letter/writeToOthers.html',  {'write_form': WriteFormOthers})
+            
             else :
-
                 letter = Letter(
                     senderId = now_member,
                     content=write_form.content,
@@ -124,11 +120,10 @@ def writeToOthers(request):
                 sendLetter.senderId = now_member
                 sendLetter.save() 
                 
-              
                 way_to_send = request.POST.get('way_to_send')
 
              
-                if way_to_send == 'all' :  # 그룹 내 모든 사용자에게 보내기 
+                if way_to_send == 'all' : 
                     for receiver in all_members.filter(job=group).exclude(memberId=memberId) : 
                         receiveLetter = Receiveletter()
                         receiveLetter.letterId = now_letter
@@ -137,8 +132,7 @@ def writeToOthers(request):
                         receiveLetter.save()
 
 
-                else : # 그룹 내 1명의 사용자에게 보내기 
-
+                else : 
                     grpMember_num = all_members.filter(job=group).exclude(memberId=memberId).count()
                     if grpMember_num != 0 :
                         random_idx = randint(0,grpMember_num-1)
@@ -149,11 +143,10 @@ def writeToOthers(request):
                         receiveLetter.readCheck = False
                         receiveLetter.save()
 
-
                 messages.add_message(request, messages.INFO, '전송 성공.')
-                return  redirect('/accounts', request.user.memberId)
+                return  HttpResponseRedirect('/letter/letterFrmMe', request.user.memberId)
         else:
-            messages.error(request, '전송 실패. 다시 시도해주세요')
+            messages.error(request, 'Error! Try Again')
             return render(request, 'letter/writeToOthers.html',  {'write_form': WriteFormOthers})
     else:
         write_form = WriteForm()
@@ -161,23 +154,22 @@ def writeToOthers(request):
 
 
 
-#나에게 보낸 메시지 목록
 @login_required
 def letterFrmMe(request):
     if not request.session.get('user'): 
         return redirect('/accounts/login')
+
     if request.method=='GET':
         try:
             memberId=request.session.get('user')
             result = []
 
-            #멤버에 해당 로그인 사용자가 존재하는지
             if Member.objects.filter(memberId=memberId).exists():
                 member=Member.objects.get(memberId=memberId)
                 nickname=member.nickname
 
                 if Receiveletter.objects.filter(receiverId=memberId):
-                    receiveInfo=Receiveletter.objects.all().filter(receiverId=memberId) #수신자가 나인 편지 필터링
+                    receiveInfo=Receiveletter.objects.all().filter(receiverId=memberId).order_by('-receiveCol')
                     for recvLetter_col in receiveInfo:
                         letter_ids = recvLetter_col.letterId
                         letter_id = letter_ids.letterId
@@ -186,9 +178,9 @@ def letterFrmMe(request):
                         now_time=datetime.now()
 
                         if str(letter_obj.senderId) == str(memberId):
-                            # 삭제된 거 전처리
+
                             if recvLetter_col.is_deleted == False :
-                                # 뿌리는 내용 전처리 
+                        
                                 if recvLetter_col.readCheck == False :
                                     letter_obj.content = "(읽지 않음)"
                                     
@@ -204,7 +196,6 @@ def letterFrmMe(request):
 
 
 
-# 타인에게 받은 목록 
 @login_required
 def letterFrmOthers(request):
     if not request.session.get('user'): 
@@ -215,13 +206,13 @@ def letterFrmOthers(request):
             memberId=request.session.get('user')
             result = []
             
-            #멤버에 해당 로그인 사용자가 존재하는지
+      
             if Member.objects.filter(memberId=memberId).exists():
                 member=Member.objects.get(memberId=memberId)
                 nickname=member.nickname
 
                 if Receiveletter.objects.filter(receiverId=memberId):
-                    receiveInfo=Receiveletter.objects.all().filter(receiverId=memberId) #수신자가 나인 편지 필터링
+                    receiveInfo=Receiveletter.objects.all().filter(receiverId=memberId).order_by('-receiveCol')
                     for recvLetter_col in receiveInfo:
                         letter_ids = recvLetter_col.letterId
                         letter_id = letter_ids.letterId
@@ -230,15 +221,16 @@ def letterFrmOthers(request):
                         now_time=datetime.now()
 
                         if str(letter_obj.senderId) != str(memberId):
-                            # 삭제된 거 전처리
+                            
                             if recvLetter_col.is_deleted == False :
-                                # 뿌리는 내용 전처리 
+                               
                                 if recvLetter_col.readCheck == False :
                                     letter_obj.content = "(읽지 않음)"
-                                #시간비교 조건 넣기
+                               
                                 if recv_date <= now_time :
                                     letter_obj.content=letter_obj.content[:30]
                                     result.append(letter_obj)
+
                                 
                                
         except member.DoesNotExist:
@@ -247,99 +239,130 @@ def letterFrmOthers(request):
     return render(request, 'letter/letterFrmOthers.html', {'result':result, 'nickname' : nickname })    
 
 
-# 받은 글 상세보기 
+
+@login_required
 def recvletter_detail(request, letterId):
-    memberId = request.session.get('user')
-    letter = Letter.objects.get(letterId=letterId)
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('accounts/Index')
 
-    recv_letter = Receiveletter.objects.all().filter(letterId=letterId).get(receiverId=memberId)
-    recv_letter.readCheck = True
-    recv_letter.save()
+    try :
+        memberId = request.session.get('user')
+        letter = Letter.objects.get(letterId=letterId)
 
-    context = {'letter': letter}
-    return render(request, 'letter/letter_detail.html', context) 
 
-# 보낸 글 상세보기
+        recv_letter = Receiveletter.objects.all().filter(letterId=letterId).get(receiverId=memberId)
+
+        if str(recv_letter.receiverId) != str(memberId) :
+            raise Http404("Error!")
+
+        recv_letter.readCheck = True
+        recv_letter.save()
+        context = {'letter': letter}
+        return render(request, 'letter/letter_detail.html', context) 
+
+    except :
+        raise Http404("Error!")
+
+
+
+@login_required
 def sentletter_detail(request, letterId):
-    memberId = request.session.get('user')
-    letter = Letter.objects.get(letterId=letterId)
-    context = {'letter': letter}
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('accounts/Index')
 
-    return render(request, 'letter/letter_detail.html', context) 
+    try :     
+        memberId = request.session.get('user')
+        letter = Letter.objects.get(letterId=letterId)
 
+        if str(letter.senderId) != str(memberId) : 
+            raise Http404("Error!")
 
-# 내가 보낸 편지 목록 
+        context = {'letter': letter}
+
+        return render(request, 'letter/letter_detail.html', context) 
+
+    except :
+        raise Http404("Error!")
+
+@login_required
 def letterIsent (request):
-    memberId = request.session.get('user')
-    letters = Letter.objects.all().filter(senderId=memberId)
+    try : 
+        memberId = request.session.get('user')
+        letters = Letter.objects.all().filter(senderId=memberId)
 
-    result= []
-    
-    for letter in letters:
-        letter_id = letter.letterId
-        sendletter_obj = Sendletter.objects.get(letterId=letter_id)
-        if sendletter_obj.is_deleted == False:
-            result.append(letter)
+        result= []
+        
+        for letter in letters:
+            letter_id = letter.letterId
+            sendletter_obj = Sendletter.objects.get(letterId=letter_id)
+            if sendletter_obj.is_deleted == False:
+                result.append(letter)
 
-    return render(request, 'letter/letterIsent.html', {'letters': result })
+        return render(request, 'letter/letterIsent.html', {'letters': result })
+        
+    except :
+        raise Http404("Error!")
 
 
-
-#보낸 메시지 삭제 기능
+@login_required
 def letter_delete_send(request, letterId):
-    memberId = request.session.get('user')
+    try : 
+        memberId = request.session.get('user')
 
-    send_letter_delete=Sendletter.objects.get(letterId=letterId)
-    send_letter_delete.is_deleted = True
-    send_letter_delete.save()
+        send_letter_delete=Sendletter.objects.get(letterId=letterId)
+        send_letter_delete.is_deleted = True
+        send_letter_delete.save()
 
-    context = {'senddelete': send_letter_delete}
-    messages.add_message(request, messages.INFO, '보낸 메시지 삭제 성공.')
-    return HttpResponseRedirect("/letter/letterIsent/")
+        context = {'senddelete': send_letter_delete}
+        messages.add_message(request, messages.INFO, '보낸 메시지 삭제 성공.')
+        return HttpResponseRedirect("/letter/letterIsent/")
+    except :
+        raise Http404("Error!")
 
 
-#받은 메시지 삭제 기능
+@login_required
 def letter_delete_receive(request, letterId):
-    memberId = request.session.get('user')
+    try  : 
+        memberId = request.session.get('user')
 
-    receive_letter_delete=Receiveletter.objects.all().filter(receiverId=memberId).get(letterId=letterId)
-    receive_letter_delete.is_deleted = True
-    receive_letter_delete.save()
-    sender_id = Sendletter.objects.get(letterId=letterId).senderId
-    print("Sender id : ", sender_id)
+        receive_letter_delete=Receiveletter.objects.all().filter(receiverId=memberId).get(letterId=letterId)
+        receive_letter_delete.is_deleted = True
+        receive_letter_delete.save()
+        sender_id = Sendletter.objects.get(letterId=letterId).senderId
+    
 
-    messages.add_message(request, messages.INFO, '받은 메시지 삭제 성공.')
-    print("전달받은 letterid : ", letterId)
+        messages.add_message(request, messages.INFO, '받은 메시지 삭제 성공.')
     
-    #타인에게 받은 편지와 내가 나에게 쓴 편지를 확인해야 함
-    if str(sender_id)==str(memberId):
-        print("in")
-        return HttpResponseRedirect("/letter/letterFrmMe/")
-    else:
-        print("else")
-        return HttpResponseRedirect("/letter/letterFrmOthers/")
+        #타인에게 받은 편지와 내가 나에게 쓴 편지를 확인해야 함
+        if str(sender_id)==str(memberId):
+            return HttpResponseRedirect("/letter/letterFrmMe/")
+        else:
+            return HttpResponseRedirect("/letter/letterFrmOthers/")
+
+    except:
+        raise Http404("Error!")
     
-    
-#휴지통 목록 (send용)
+
+@login_required
 def show_delete_list(request, page):
     if not request.session.get('user'): 
         return redirect('/accounts/login')
+        
     if request.method=='GET':
         try:
             memberId=request.session.get('user')
             result=[]
          
 
-            #멤버에 해당 로그인 사용자가 존재하는지
             if Member.objects.filter(memberId=memberId).exists():
                 member=Member.objects.get(memberId=memberId)
                 nickname=member.nickname
 
 
                 if str(page)=='send':
-                    #보낸 메시지 중 삭제한 목록 (send)
+              
                     if Sendletter.objects.filter(senderId=memberId):
-                        send_delete_list=Sendletter.objects.all().filter(is_deleted=True) #is_deleted가 True인 삭제된 메시지 필터링
+                        send_delete_list=Sendletter.objects.all().filter(is_deleted=True) 
                         for send_col in send_delete_list:
                             letter_ids = send_col.letterId
                             letter_id = letter_ids.letterId
@@ -348,7 +371,7 @@ def show_delete_list(request, page):
                             result.append(letter_obj)
                             
                 if str(page)=='receive':
-                    #받은 메시지 중 삭제한 목록 (receive)
+                   
                     if Receiveletter.objects.filter(is_deleted=True):
                         receive_delete_list=Receiveletter.objects.all().filter(is_deleted=True)
                         for receive_col in receive_delete_list:

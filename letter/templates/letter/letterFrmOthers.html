@@ -41,27 +41,23 @@
                     <tbody>
                         {% for frmOthers in result %}
                         <tr>
-                            <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{forloop.counter}}&nbsp;&nbsp;&nbsp;</td>
-                            <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">
+                            <td onClick="location.href='/letter/receive/detail/{{ frmOthers.letterId }}/'">{{forloop.counter}}&nbsp;&nbsp;&nbsp;</td>
+                            <td onClick="location.href='/letter/receive/detail/{{ frmOthers.letterId }}/'">
                                 {% if frmOthers.emotion >= 62 and frmOthers.emotion <= 100  %}
-                                <iframe src="{% static 'assets/smile.svg' %}" style="height: 20px; width :20px;" ></iframe>
-                                    <!-- <object data="{% static 'assets/smile.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>            -->
+                                    <object data="{% static 'assets/smile.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>
                                 {% elif frmOthers.emotion >= 37 and frmOthers.emotion < 62 %} 
-                                <iframe src="{% static 'assets/thinking.svg' %}" style="height: 20px; width :20px;" ></iframe>
-                                    <!-- <object data="{% static 'assets/thinking.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>            -->
+                                    <object data="{% static 'assets/thinking.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>
                                 {% elif frmOthers.emotion > 0 and frmOthers.emotion < 37 %}
-                                <iframe src="{% static 'assets/angry.svg' %}" style="height: 20px; width :20px;" ></iframe>
-                                    <!-- <object data="{% static 'assets/angry.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>            -->
+                                    <object data="{% static 'assets/angry.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>
                                 {% else %}
                                   에러
                                 {% endif %}
                             </td>
-                            <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{frmOthers.senderId}}&nbsp;&nbsp;&nbsp;</td>
-                            <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{frmOthers.content}}&nbsp;&nbsp;&nbsp;</td>
-                            <td onClick="location.href='/letter/receive/detail/{{ toMe.letterId }}/'">{{frmOthers.sendDate | date:"Y.m.d H:i "}}</td>
-                            <td onClick="location.href='/letter/delreceive/{{toMe.letterId}}/'">
-                                <iframe src="{% static 'assets/trash.svg' %}" style="height: 20px; width :20px;" ></iframe>
-                                <!-- <object data="{% static 'assets/trash.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>            -->
+                            <td onClick="location.href='/letter/receive/detail/{{ frmOthers.letterId }}/'">{{frmOthers.senderId}}&nbsp;&nbsp;&nbsp;</td>
+                            <td onClick="location.href='/letter/receive/detail/{{ frmOthers.letterId }}/'">{{frmOthers.content}}&nbsp;&nbsp;&nbsp;</td>
+                            <td onClick="location.href='/letter/receive/detail/{{ frmOthers.letterId }}/'">{{frmOthers.sendDate | date:"Y.m.d H:i "}}</td>
+                            <td onClick="location.href='/letter/delreceive/{{frmOthers.letterId}}/'">
+                            <object data="{% static 'assets/trash.svg' %}" type="image/svg+xml" style="height: 20px; width :20px;" ></object>
                             </td>
                         </tr>
                             {% endfor %}
