@@ -25,10 +25,10 @@ def signup(request):
             form.save()             
             return HttpResponseRedirect('/accounts')
         else:
-            return render(request, 'accounts/signup.html', {'form': form})
+            return render(request, 'accounts/SignUp.html', {'form': form})
     else:
         form = UserCreationForm()
-    return render(request, 'accounts/signup.html', {'form': form})
+    return render(request, 'accounts/SignUp.html', {'form': form})
 
 
 
