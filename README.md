@@ -6,8 +6,11 @@
 ![image](https://user-images.githubusercontent.com/74848401/162601167-a96cd493-a715-4ed1-adca-832000d2728f.png)
 ![image](https://user-images.githubusercontent.com/74848401/162601173-3b9abd44-a15d-42cc-b683-72c583563c2d.png)
 ![image](https://user-images.githubusercontent.com/74848401/162601176-1554b909-ac5f-4989-b18f-b380cec1a3a4.png)
+![image](https://user-images.githubusercontent.com/74848401/162601536-0650a0f5-5ca0-4818-a0ea-1d025f3d6c22.png)
+
 
 ### 결과화면
+- Intro
 ![image](https://user-images.githubusercontent.com/74848401/162601196-1d88b0d2-1df8-4661-8ead-f5cd2de8dfc0.png)
 ![image](https://user-images.githubusercontent.com/74848401/162601230-b687c0c8-ad66-4742-abc2-a4b0c39bbed0.png)
 - 내가 미래의 나에게 보낸 편지함(편지를 읽기 전, emotion의 이모티콘으로 편지의 긍정/부정도를 판단 가능)
