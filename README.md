@@ -3,7 +3,6 @@
 2021 소개딩 시즌3 한국인터넷진흥원장상 수상
 
 ### To, morrow 기획
-- 제출안
 ![image](https://user-images.githubusercontent.com/74848401/162601167-a96cd493-a715-4ed1-adca-832000d2728f.png)
 ![image](https://user-images.githubusercontent.com/74848401/162601173-3b9abd44-a15d-42cc-b683-72c583563c2d.png)
 ![image](https://user-images.githubusercontent.com/74848401/162601176-1554b909-ac5f-4989-b18f-b380cec1a3a4.png)
